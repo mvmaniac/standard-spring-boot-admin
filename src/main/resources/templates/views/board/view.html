@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, ~{::script}, ~{::style})}">
+<head>
+  <title>보기 - DevFactory</title>
+  <style>
+    dd {margin-bottom: 1.5rem}
+    dd:last-child {margin-bottom: 0}
+  </style>
+</head>
+<body>
+
+<section th:ref="main" th:object="${board}" class="section-main">
+  <h3 th:text="*{title}"></h3>
+  <hr>
+  <dl>
+    <dt>게시판</dt>
+    <dd th:text="*{boardType}"></dd>
+
+    <dt>부제목</dt>
+    <dd th:text="*{subTitle}"></dd>
+
+    <dt>내용</dt>
+    <dd th:text="*{content}"></dd>
+
+    <dt>등록일 / 수정일</dt>
+    <dd th:text="|*{createdDate} / *{updatedDate}|"></dd>
+  </dl>
+  <hr>
+  <div class="form-group mb-0 d-flex justify-content-between">
+    <span><a href="#" id="btnList" class="btn btn-secondary btn-sm" title="목록으로">
+      <i class="fas fa-list"></i>&nbsp;목록으로</a></span>
+    <span>
+      <!-- TODO: 글쓴이의 경우에만 보이도록... -->
+      <a href="javascript:void(0)" id="btnForm" class="btn btn-info btn-sm" title="수정"
+         th:if="${board?.idx}"><i class="fas fa-edit"></i>&nbsp;수정</a>
+      <a href="javascript:void(0)" id="btnDelete" class="btn btn-danger btn-sm" title="삭제"
+         th:if="${board?.idx}"><i class="fas fa-trash-alt"></i>&nbsp;삭제</a>
+    </span>
+  </div>
+</section>
+
+<script th:inline="javascript">
+  $(function () {
+    $("#btnList").click(function () {
+      location.href = '[(@{/boards})]';
+    });
+
+    $("#btnForm").click(function () {
+      location.href = '[(@{/boards/form(idx=${board.idx})})]';
+    });
+
+    $("#btnDelete").click(function () {
+      $.ajax({
+        url: 'http://localhost:8081/api/boards/[(${board.idx})]',
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (response, textStatus, jqXHR) {
+          alert('게시글이 삭제 되었습니다.');
+          location.href = '[(@{/boards})]';
+        },
+        error: function (jqXHR, textStatus, error) {
+          console.error(textStatus, error);
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

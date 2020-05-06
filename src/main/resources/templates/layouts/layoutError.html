@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="error(main, title)">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+  <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+
+  <link rel="stylesheet" th:href="@{/css/normalize.css}"/>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" th:href="@{/css/error.css}"/>
+
+  <title th:replace="${title}" th:assert="${!#strings.isEmpty(title)}">DevFactory</title>
+</head>
+
+<!--/* // @formatter:off */-->
+<body>
+  <div class="wrap">
+    <main th:insert="${main}" role="main" class="main"></main>
+  </div>
+
+  <script th:src="@{/webjars/font-awesome/5.13.0/js/all.min.js}"></script>
+</body>
+<!--/* // @formatter:on */-->
+
+</html>

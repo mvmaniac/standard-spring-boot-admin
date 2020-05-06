@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, _, ~{::link})}">
+<head>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}"/>
+  <title>DevFactory</title>
+</head>
+<body>
+
+<section th:ref="main" class="jumbotron">
+  <h1 class="display-4">Hello, world!</h1>
+  <p class="lead">Spring Boot 2 example for board</p>
+  <hr class="my-4">
+  <p>아래 버튼을 눌러 시작하세요!</p>
+  <a class="btn btn-primary btn-lg" th:href="@{/boards}" title="시작하기">
+    <i class="fas fa-hand-middle-finger"></i>&nbsp;시작하기
+  </a>
+</section>
+
+</body>
+</html>

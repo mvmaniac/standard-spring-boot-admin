@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:insert="~{layouts/layoutSign :: sign(~{::main}, ~{::title}, ~{::script})}">
+<head>
+  <title>로그인 - DevFactory</title>
+</head>
+<body>
+
+<!--// @formatter:off-->
+<section th:ref="main" class="section-main">
+  <div class="card card-sign-in">
+    <div class="card-body">
+      <h5 class="card-title text-center"><strong>로그인</strong></h5>
+
+      <div th:unless="${param.error eq null}" class="alert alert-danger">
+        <strong>Failed to login.</strong><br/>
+        <span th:text="${#request.getAttribute('errorMsg')}"
+              th:unless="${#request.getAttribute('errorMsg') eq null}">Invalid credentials</span>
+      </div>
+
+      <div th:unless="${param.logout eq null}" class="alert alert-success">
+        You have been logged out.
+      </div>
+
+      <div th:unless="${param.expired eq null}" class="alert alert-success">
+        <strong>Session Expired</strong><br/>
+        <span>
+          You have been forcibly logged out due to multiple sessions on the same account<br/>
+          (only one active session per user is allowed).
+        </span>
+      </div>
+
+      <form class="form-sign-in" method="post" th:action="@{/login}">
+        <div class="form-label-group">
+          <input type="email" id="inputEmail" name="username" class="form-control" placeholder="이메일 주소" autofocus>
+          <label for="inputEmail">이메일 주소</label>
+        </div>
+
+        <div class="form-label-group">
+          <input type="password" id="inputPassword" name="password" class="form-control" placeholder="비밀번호">
+          <label for="inputPassword">비밀번호</label>
+        </div>
+
+        <div class="custom-control custom-checkbox ml-2  mb-3">
+          <input type="checkbox" class="custom-control-input" id="customCheck1">
+          <label class="custom-control-label small hand" for="customCheck1" title="로그인 유지">로그인 유지</label>
+        </div>
+
+        <button class="btn btn-lg btn-sign btn-block text-uppercase" type="submit" title="로그인">
+          <i class="fas fa-sign-in-alt mr-2"></i>로그인
+        </button>
+
+        <p class="divider-text"><span class="bg-white">OR</span></p>
+
+        <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit" title="구글 아이디로 로그인" data-social="google">
+          <i class="fab fa-google mr-2"></i>&nbsp;구글 아이디로 로그인
+        </button>
+        <button class="btn btn-lg btn-kakao btn-block text-uppercase" type="submit" title="카카오 아이디로 로그인" data-social="kakao">
+          <i class="fab fa-kickstarter-k mr-2"></i>&nbsp;카카오 아이디로 로그인
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+<!--// @formatter:on-->
+
+<script>
+  $(function () {
+    $('button.btn-google, button.btn-kakao').click(function (evt) {
+      var socialType = $(this).data('social');
+      evt.preventDefault();
+      location.href = "/oauth2/authorization/"+ socialType;
+    });
+
+    $('button.btn-sign').click(function (evt) {
+      evt.preventDefault();
+      alert('현재는 구글, 카카오 아이디 로그인 만 지원 합니다.')
+    });
+  });
+</script>
+
+</body>
+</html>

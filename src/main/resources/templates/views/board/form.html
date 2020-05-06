@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, ~{::script}, _)}">
+<head>
+  <title>등록 - DevFactory</title>
+</head>
+<body>
+
+<section th:ref="main" class="section-main">
+  <input id="boardIdx" type="hidden" th:value="${board?.idx}">
+  <h3 th:text="${(board?.idx ne null) ? '게시글 수정' : '게시글 등록'}"></h3>
+  <hr>
+  <div class="form-group">
+    <label for="boardType" class="font-weight-bold">게시판 선택</label>
+    <select id="boardType" class="form-control">
+      <option value="">--선택--</option>
+      <option th:each="boardType : ${T(io.devfactory.domain.enums.BoardType).values()}"
+              th:value="${boardType}" th:text="${boardType.value}"
+              th:selected="${board?.boardType eq boardType}">
+      </option>
+    </select>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="boardTitle" class="font-weight-bold">제목</label>
+    <input id="boardTitle" type="text" class="form-control" required th:value="${board?.title}">
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="boardSubTitle">부제목<span class="text-muted">&nbsp;(Optional)</span></label>
+    <input id="boardSubTitle" type="text" class="form-control" required
+           th:value="${board?.subTitle}">
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="boardContent" class="font-weight-bold">내용</label>
+    <textarea id="boardContent" type="text" class="form-control" rows="5"
+              th:text="${board?.content}"></textarea>
+  </div>
+
+  <div class="form-group mb-0 d-flex justify-content-between">
+    <span><a href="#" id="btnList" class="btn btn-secondary btn-sm" title="목록으로">
+      <i class="fas fa-list"></i>&nbsp;목록으로</a></span>
+    <span>
+      <a href="javascript:void(0)" id="btnInsert" class="btn btn-primary btn-sm" title="저장"
+         th:unless="${board?.idx}"><i class="fas fa-edit"></i>&nbsp;저장</a>
+      <a href="javascript:void(0)" id="btnUpdate" class="btn btn-info btn-sm" title="수정"
+         th:if="${board?.idx}"><i class="fas fa-edit"></i>&nbsp;수정</a>
+    </span>
+  </div>
+</section>
+
+<!-- js 단은 하나로 처리함... -->
+<script th:inline="javascript">
+  $(function () {
+    $("#btnList").click(function () {
+      location.href = '[(@{/boards})]';
+    });
+
+    $("#btnInsert").click(function () {
+      var jsonData = getValidateData();
+
+      if (!jsonData) {
+        return;
+      }
+
+      $.ajax({
+        url: 'http://localhost:8081/api/boards',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: jsonData,
+        success: function (response, textStatus, jqXHR) {
+          alert('게시글이 등록 되었습니다.');
+          console.log(response);
+        },
+        error: function (jqXHR, textStatus, error) {
+          console.error(textStatus, error);
+        }
+      });
+    });
+
+    $("#btnUpdate").click(function () {
+      var jsonData = getValidateData();
+
+      if (!jsonData) {
+        return;
+      }
+
+      $.ajax({
+        url: 'http://localhost:8081/api/boards/' + $('#boardIdx').val(),
+        type: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: jsonData,
+        success: function (response, textStatus, jqXHR) {
+          alert('게시글이 수정 되었습니다.');
+          console.log(response);
+        },
+        error: function (jqXHR, textStatus, error) {
+          console.error(textStatus, error);
+        }
+      });
+    });
+
+    function getValidateData() {
+      var $boardType = $('#boardType option:selected'),
+        jsonData;
+
+      if (!$boardType.val()) {
+        alert('게시판을 선택 해주세요.');
+        $boardType.parent().focus();
+        return null;
+      }
+
+      jsonData = JSON.stringify({
+        title: $('#boardTitle').val(),
+        subTitle: $('#boardSubTitle').val(),
+        content: $('#boardContent').val(),
+        boardType: $boardType.val()
+      });
+
+      return jsonData;
+    }
+  });
+</script>
+
+</body>
+</html>

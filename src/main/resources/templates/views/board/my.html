@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, ~{::script}, _)}">
+<head>
+  <title>나의 게시판 - DevFactory</title>
+</head>
+<body>
+
+<div th:ref="main" class="container">
+  <div class="row">
+    <div id="create" class="ml-auto"><a th:href="@{/events/form}" class="btn btn-primary btn-sm my-2">Create Event</a>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table table-bordered table-striped table-condensed">
+      <thead>
+      <tr>
+        <th>Date/Time</th>
+        <th>Owner</th>
+        <th>Attendee</th>
+        <th>Summary</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${result.count == 0}">
+        <td colspan="4" class="font-weight-bold">No events.</td>
+      </tr>
+      <tr th:each="event: ${result.events}">
+        <td th:text="${event.eventDateTime}"></td>
+        <td th:text="${event.ownerName}"></td>
+        <td th:text="${event.attendeeName}"></td>
+
+        <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.summary}"></a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script type="text/javascript">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, ~{::script}, _)}">
+<head>
+  <title>전체 게시판 - DevFactory</title>
+</head>
+<body>
+
+<section th:ref="main" class="section-main">
+  <div id="create" class="d-flex justify-content-end mb-1">
+    <a th:href="@{/boards/form}" class="btn btn-primary btn-sm" title="등록">
+      <i class="fas fa-pen"></i>&nbsp;등록</a>
+  </div>
+
+  <div class="table-responsive" style="overflow-x: auto">
+    <table class="table table-hover table-bordered table-dark">
+      <caption class="d-none">전체 게시판 목록</caption>
+      <colgroup>
+        <col style="width: 5%">
+        <col style="width: 15%">
+        <col>
+        <col style="width: 15%">
+        <col style="width: 20%">
+      </colgroup>
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">분류</th>
+        <th scope="col">제목</th>
+        <th scope="col">등록자</th>
+        <th scope="col">등록일</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${count eq 0}">
+        <td colspan="5" class="font-weight-bold text-center col-span" data-title="">게시글이 없습니다.</td>
+      </tr>
+      <tr th:each="board: ${boards}">
+        <td th:text="${board.idx}" data-title="#"></td>
+        <td th:text="${board.boardType.value}" data-title="분류"></td>
+        <td data-title="제목"><a th:href="@{/boards/{idx}(idx=${board.idx},page=${boards.number + 1})}"
+                              th:text="${board.title}" class="text-white"></a></td>
+        <td th:text="${board.createdBy}" data-title="등록자"></td>
+        <td th:text="${#temporals.format(board.createdDate, 'yyyy-mm-dd HH:mm:ss')}"
+            data-title="등록일"></td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!--/*
+  <div th:with="
+      pageNumber=${boards.number + 1},
+      pageBlock=${boards.numberOfElements eq 0 ? 1 : boards.numberOfElements},
+      totalPage=${boards.totalPages eq 0 ? 1 : boards.totalPages}">
+    <div th:with="
+      prevPage=${((pageNumber - 1) / pageBlock) * pageBlock},
+      nextPage=${T(Math).min(prevPage + pageBlock + 1, totalPage)},
+      startPage=${prevPage + 1},
+      endPage=${T(Math).min(pageBlock + prevPage, totalPage)},
+      isPrev=${startPage > pageBlock},
+      isNext=${endPage < totalPage}">
+      number: <span th:text="${boards.number}"></span><br/>
+      size: <span th:text="${boards.size}"></span><br/>
+      totalPage: <span th:text="${boards.totalPages}"></span><br/>
+      totalElements: <span th:text="${boards.totalElements}"></span><br/>
+      numberOfElements: <span th:text="${boards.numberOfElements}"></span><br/>
+      first: <span th:text="${boards.first}"></span><br/>
+      last: <span th:text="${boards.last}"></span><br/>
+      prevPage: <span th:text="${prevPage}"></span><br/>
+      nextPage: <span th:text="${nextPage}"></span><br/>
+      startPage: <span th:text="${startPage}"></span><br/>
+      endPage: <span th:text="${endPage}"></span><br/>
+      isPrev: <span th:text="${isPrev}"></span><br
+    />
+      isNext: <span th:text="${isNext}"></span><br/>
+    </div>
+  </div>
+  */-->
+
+  <nav th:with="
+        pageNumber=${boards.number + 1},
+        pageBlock=${boards.numberOfElements eq 0 ? 1 : boards.numberOfElements},
+        totalPage=${boards.totalPages eq 0 ? 1 : boards.totalPages}">
+    <!--suppress ThymeleafVariablesResolveInspection -->
+    <ul class="pagination justify-content-center mb-0"
+        th:with="
+          prevPage=${((pageNumber - 1) / pageBlock) * pageBlock},
+          nextPage=${T(Math).min(prevPage + pageBlock + 1, totalPage)},
+          startPage=${prevPage + 1},
+          endPage=${T(Math).min(pageBlock + prevPage, totalPage)},
+          isPrev=${startPage > pageBlock},
+          isNext=${endPage < totalPage}">
+      <li class="page-item" th:classappend="${boards.first} ? 'disabled'" th:title="처음">
+        <a class="page-link" th:href="@{/boards(page=1)}">&laquo;</a>
+      </li>
+      <li class="page-item" th:classappend="${!isPrev} ? 'disabled'" th:title="이전">
+        <a class="page-link font-weight-bold" th:href="@{/boards(page=${prevPage})}">&lsaquo;</a>
+      </li>
+
+      <li th:each="page: ${#numbers.sequence(startPage, endPage)}" class="page-item"
+          th:classappend="(${page} eq ${pageNumber}) ? 'active' : ''">
+        <a class="page-link" th:href="@{/boards(page=${page})}" th:text="${page}"></a>
+      </li>
+
+      <li class="page-item" th:classappend="${!isNext} ? 'disabled'" th:title="다음">
+        <a class="page-link" th:href="@{/boards(page=${nextPage})}">&rsaquo;</a>
+      </li>
+      <li class="page-item" th:classappend="${boards.last} ? 'disabled'" th:title="마지막">
+        <a class="page-link" th:href="@{/boards(page=${boards.totalPages})}">&raquo;</a>
+      </li>
+    </ul>
+  </nav>
+</section>
+
+<script type="text/javascript">
+  $(function () {
+
+  });
+</script>
+
+</body>
+</html>

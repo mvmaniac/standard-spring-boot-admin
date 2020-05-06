@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutError :: error(~{::main}, ~{::title})}">
+<head>
+  <title>403</title>
+</head>
+<body>
+
+<section th:ref="main">
+  <div class="error-template">
+    <h1>Oops!</h1>
+    <h2>403 - Forbidden</h2>
+    <div class="error-details">
+      죄송합니다. 권한이 없으시네요.
+    </div>
+    <div class="error-actions">
+      <a class="btn btn-primary btn-sm" th:href="@{/}"><i class="fas fa-home"></i>&nbsp;홈으로</a>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
