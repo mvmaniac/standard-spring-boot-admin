@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+
+import static org.springframework.security.core.context.SecurityContextHolder.MODE_INHERITABLETHREADLOCAL;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -117,6 +120,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         })
     ;
     // @formatter:on
+
+    // 메인 스레드와 자식 스레드 간 ThreadLocal 공유
+     SecurityContextHolder.setStrategyName(MODE_INHERITABLETHREADLOCAL);
   }
 
 }
