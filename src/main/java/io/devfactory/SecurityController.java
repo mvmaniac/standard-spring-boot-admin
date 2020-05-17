@@ -15,7 +15,6 @@ public class SecurityController {
 
   @GetMapping("/")
   public String index(HttpSession session) {
-
     // ThreadLocal을 통한 SecurityContextHolder에서 가져오는 방법
     final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
