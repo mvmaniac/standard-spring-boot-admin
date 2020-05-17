@@ -2,11 +2,11 @@ spring:
   application:
     name: spring-boot-security
 
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:tcp://localhost/../data_user/board
-#    username: sa
-#    password: 1234
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 1234
 
   jpa:
     show-sql: false
@@ -17,6 +17,10 @@ spring:
         format_sql: true
         use_sql_comments: true,
 #        default_batch_fetch_size: 100
+
+  devtools:
+    restart.enabled: false
+    livereload.enabled: true
 
 logging:
   level:

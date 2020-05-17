@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, _, ~{::style})}">
+<head>
+  <title>Admin Home - DevFactory</title>
+  <style>
+    a {
+      color: black;
+    }
+
+    a:hover {
+      color: black;
+      font-weight: bold;
+    }
+
+    .nav-link.active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<section th:ref="main" class="section-main">
+  <ul class="nav nav-tabs" id="myTab">
+    <li class="nav-item">
+      <a class="nav-link active" id="manageUserTab" data-toggle="tab"
+         href="#manageUser">사용자 관리</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="manageAuthorityTab" data-toggle="tab"
+         href="#manageAuthority">사용자 관리</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="manageResourceTab" data-toggle="tab"
+         href="#manageResource">리소스 관리</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="manageAuthorityHierarchyTab" data-toggle="tab"
+         href="#manageAuthorityHierarchy">권한 계층 관리</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="manageIpTab" data-toggle="tab"
+         href="#manageIp">IP 관리</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="manageUser">
+      사용자 관리
+    </div>
+    <div class="tab-pane fade" id="manageAuthority">
+      <div th:replace="~{views/admin/tab :: tab}"></div>
+    </div>
+    <div class="tab-pane fade" id="manageResource">
+      리소스 관리
+    </div>
+    <div class="tab-pane fade" id="manageAuthorityHierarchy">
+      권한 계층 관리
+    </div>
+    <div class="tab-pane fade" id="manageIp">
+      IP 관리
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
