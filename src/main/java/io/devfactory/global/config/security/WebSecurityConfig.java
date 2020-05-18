@@ -1,9 +1,11 @@
-package io.devfactory.security.config;
+package io.devfactory.global.config.security;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
+
+  @Override
+  public void configure(WebSecurity web) {
+    web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
   }
 
   @Override
@@ -30,12 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
       .withUser("manager")
         .password(password)
-        .roles("MANAGER")
+        .roles("MANAGER", "USER")
       .and()
 
       .withUser("admin")
         .password(password)
-        .roles("ADMIN")
+        .roles("ADMIN", "USER", "MANAGER")
     ;
     // @formatter:on
   }
@@ -46,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
       .authorizeRequests()
 
-        .antMatchers("/", "/admin/home")
+        .antMatchers("/", "/user")
           .permitAll()
 
         .antMatchers("/user/mypage")
