@@ -53,12 +53,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs = [
-        '-Amapstruct.suppressGeneratorTimestamp=true'
-    ]
-}
-
 test {
     useJUnitPlatform()
 }

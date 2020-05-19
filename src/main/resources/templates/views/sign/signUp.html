@@ -1,48 +1,123 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:insert="~{layouts/layoutSign :: sign(~{::main}, ~{::title}, _)}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutSign :: sign(~{::main}, ~{::title}, ~{::script})}">
 <head>
   <title>회원가입 - DevFactory</title>
 </head>
 <body>
 
+<!--// @formatter:off-->
 <section th:ref="main" class="section-main">
   <div class="card card-sign-in">
     <div class="card-body">
       <h5 class="card-title text-center"><strong>회원가입</strong></h5>
-      <form class="form-sign-in">
+      <form th:action="@{/sign-up}" id="formSignUp" class="form-sign-in" method="POST">
         <div class="form-label-group">
-          <input type="text" id="inputUsername" class="form-control" placeholder="이름" required autofocus>
+          <input type="text" id="inputUsername" name="username" class="form-control" placeholder="이름" required autofocus>
           <label for="inputUsername">이름</label>
           <div class="invalid-feedback d-block"></div>
         </div>
 
         <div class="form-label-group">
-          <input type="email" id="inputEmail" class="form-control" placeholder="이메일 주소" required>
+          <input type="email" id="inputEmail" name="email" class="form-control" placeholder="이메일 주소" required>
           <label for="inputEmail">이메일 주소</label>
         </div>
 
         <div class="form-label-group">
-          <input type="password" id="inputPassword" class="form-control" placeholder="비밀번호" required>
+          <input type="password" id="inputPassword" name="password" class="form-control" placeholder="비밀번호" required>
           <label for="inputPassword">비밀번호</label>
         </div>
 
-        <button class="btn btn-lg btn-sign btn-block text-uppercase" type="submit" title="회원가입">
+        <div class="form-label-group">
+          <input type="number" id="inputAge" name="age" class="form-control" min="1" max="120">
+          <label for="inputAge">나이</label>
+        </div>
+
+        <button id="btnSignUp" class="btn btn-lg btn-sign btn-block text-uppercase" type="submit" title="회원가입">
           <i class="fas fa-user mr-2"></i>회원가입
         </button>
         <span class="d-block text-center mt-2 small">이미 회원 이세요? <a th:href="@{/sign-in/form}">로그인</a></span>
 
         <p class="divider-text"><span class="bg-white">OR</span></p>
 
-        <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit" title="구글 아이디로 로그인">
+        <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit" title="구글 아이디로 회원가입">
           <i class="fab fa-google mr-2"></i>&nbsp;구글 아이디로 회원가입
         </button>
-        <button class="btn btn-lg btn-kakao btn-block text-uppercase" type="submit" title="카카오 아이디로 로그인">
-          <i class="fab fa-kickstarter-k mr-2"></i>&nbsp;카카오 아이디로 로그인
+        <button class="btn btn-lg btn-kakao btn-block text-uppercase" type="submit" title="카카오 아이디로 회원가입">
+          <i class="fab fa-kickstarter-k mr-2"></i>&nbsp;카카오 아이디로 회원가입
         </button>
       </form>
     </div>
   </div>
 </section>
+<!--// @formatter:on-->
+
+<script th:inline="javascript">
+  $(function () {
+    var $formSignUp = $('#formSignUp'),
+        $inputUsername = $('#inputUsername'),
+        $inputEmail = $('#inputEmail'),
+        $inputPassword = $('#inputPassword');
+
+    $('#btnSignUp').click(function (evt) {
+      evt.preventDefault();
+
+      if (!formValidation()) {
+        return;
+      }
+
+      $formSignUp.submit();
+
+      // $.ajax({
+      //   url: 'http://localhost:8080/sign-up',
+      //   type: 'POST',
+      //   contentType: 'application/json',
+      //   dataType: 'json',
+      //   data:formToJson()
+      // })
+      // .done(function (response, textStatus, jqXHR) {
+      //   console.log(response);
+      // })
+      // .fail(function (jqXHR, textStatus, error) {
+      //   console.error(textStatus, error);
+      // });
+
+    });
+
+    function formValidation() {
+      if (!$inputUsername.val()) {
+        alertAndFocus($inputUsername, '이름을 입력해주세요.');
+        return false;
+      }
+
+      if (!$inputEmail.val()) {
+        alertAndFocus($inputEmail, '이메일을 입력해주세요.');
+        return false;
+      }
+
+      if (!$inputPassword.val()) {
+        alertAndFocus($inputPassword, '비밀번호를 입력해주세요.');
+        return false;
+      }
+
+      return true;
+    }
+
+    function alertAndFocus($element, message) {
+      alert(message);
+      $element.focus();
+    }
+
+    // function formToJson() {
+    //   return JSON.stringify({
+    //     username: $inputUsername.val(),
+    //     email: $inputEmail.val(),
+    //     password: $inputPassword.val(),
+    //     age: $('#inputAge').val()
+    //   });
+    // }
+  });
+</script>
 
 </body>
 </html>

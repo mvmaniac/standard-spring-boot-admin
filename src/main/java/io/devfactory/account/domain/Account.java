@@ -1,15 +1,21 @@
 package io.devfactory.account.domain;
 
+import io.devfactory.account.model.Password;
 import io.devfactory.global.common.model.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import java.util.Objects;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
@@ -33,8 +39,9 @@ public class Account extends BaseEntity {
   @Column(name = "account_username", length = 10, nullable = false)
   private String username;
 
-  @Column(name = "account_password", length = 20)
-  private String password;
+  @Embedded
+  @AttributeOverride(name = "value", column = @Column(name = "account_password"))
+  private Password password;
 
   @Column(name = "account_email", length = 30)
   private String email;
@@ -45,13 +52,22 @@ public class Account extends BaseEntity {
   @Column(name = "account_role", length = 10)
   private String role;
 
-  @Builder(builderMethodName = "create")
-  private Account(Long id, String password, String email, int age, String role) {
-    this.id = id;
-    this.password = password;
+  @Builder(builderMethodName = "of")
+  private Account(String username, String password, String email, int age, String role) {
+    this.username = username;
+    this.password = new Password(password);
     this.email = email;
     this.age = age;
-    this.role = role;
+    this.role = Objects.isNull(role) ? "ROLE_USER" : role;
+  }
+
+  public Account encodePassword(PasswordEncoder encoder) {
+    this.password.encode(encoder);
+    return this;
+  }
+
+  public boolean isMatches(PasswordEncoder encoder, String rawPassword) {
+    return password.isMatches(encoder, rawPassword);
   }
 
 }
