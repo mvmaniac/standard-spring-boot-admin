@@ -8,6 +8,10 @@ spring:
     username: dev
     password: dev
 
+    initialization-mode: always
+    platform: postgres
+    data: classpath:sql/data-postgres.sql
+
   jpa:
     show-sql: false
     hibernate:

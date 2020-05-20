@@ -29,7 +29,7 @@
         </span>
       </div>
 
-      <form class="form-sign-in" method="post" th:action="@{/login}">
+      <form th:action="@{/login}" method="post" class="form-sign-in">
         <div class="form-label-group">
           <input type="email" id="inputEmail" name="username" class="form-control" placeholder="이메일 주소" autofocus>
           <label for="inputEmail">이메일 주소</label>
@@ -40,10 +40,10 @@
           <label for="inputPassword">비밀번호</label>
         </div>
 
-        <div class="custom-control custom-checkbox ml-2  mb-3">
+        <!--<div class="custom-control custom-checkbox ml-2  mb-3">
           <input type="checkbox" class="custom-control-input" id="customCheck1">
           <label class="custom-control-label small hand" for="customCheck1" title="로그인 유지">로그인 유지</label>
-        </div>
+        </div>-->
 
         <button class="btn btn-lg btn-sign btn-block text-uppercase" type="submit" title="로그인">
           <i class="fas fa-sign-in-alt mr-2"></i>로그인
@@ -66,14 +66,10 @@
 <script>
   $(function () {
     $('button.btn-google, button.btn-kakao').click(function (evt) {
-      var socialType = $(this).data('social');
-      evt.preventDefault();
-      location.href = "/oauth2/authorization/"+ socialType;
-    });
-
-    $('button.btn-sign').click(function (evt) {
-      evt.preventDefault();
-      alert('현재는 구글, 카카오 아이디 로그인 만 지원 합니다.')
+      alert('현재는 구글, 카카오 아이디 로그인 지원하지 않습니다.')
+      // var socialType = $(this).data('social');
+      // evt.preventDefault();
+      // location.href = "/oauth2/authorization/"+ socialType;
     });
   });
 </script>

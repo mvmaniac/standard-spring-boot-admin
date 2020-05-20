@@ -1,21 +1,33 @@
 package io.devfactory.global.config.security;
 
+import io.devfactory.global.config.security.provider.CustomAuthenticationProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+  private final UserDetailsService userDetailsService;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
+
+  @Bean
+  public AuthenticationProvider authenticationProvider() {
+    return new CustomAuthenticationProvider(passwordEncoder(), userDetailsService);
   }
 
   @Override
@@ -24,25 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    final String password = passwordEncoder().encode("1234");
-
+  protected void configure(AuthenticationManagerBuilder auth) {
     // @formatter:off
-    auth.inMemoryAuthentication()
-
-      .withUser("user")
-        .password(password)
-        .roles("USER")
-      .and()
-
-      .withUser("manager")
-        .password(password)
-        .roles("MANAGER", "USER")
-      .and()
-
-      .withUser("admin")
-        .password(password)
-        .roles("ADMIN", "USER", "MANAGER")
+    auth
+      .authenticationProvider(authenticationProvider())
     ;
     // @formatter:on
   }
@@ -70,6 +67,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       .and()
 
       .formLogin()
+        .loginPage("/sign-in/form")
+        .loginProcessingUrl("/login")
+        .defaultSuccessUrl("/")
+        .permitAll()
+      .and()
+
+      .logout()
+        .logoutUrl("/sign-out")
+        .logoutSuccessUrl("/")
+      .and()
     ;
     // @formatter:on
   }

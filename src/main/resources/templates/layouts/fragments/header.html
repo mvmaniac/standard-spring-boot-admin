@@ -50,14 +50,14 @@
   <div sec:authorize="isAuthenticated()">
     <span class="text-white align-middle" th:text="|${session?.member?.name}님 로그인|"></span>
     &nbsp;
-    <form method="post" th:action="@{/logout}" class="d-inline-block">
+    <form th:action="@{/sign-out}" method="post" class="d-inline-block">
       <!--/* csrf 를 활성화 하면 logout 은 post 로 해야 함 */-->
       <button type="submit" class="btn btn-success btn-sm">
         <i class="fas fa-sign-out-alt"></i>&nbsp;로그아웃
       </button>
     </form>
   </div>
-  <div sec:authorize="!isAuthenticated()">
+  <div sec:authorize="isAnonymous()">
     <a th:href="@{/sign-up/form}" class="btn btn-info btn-sm" title="회원가입">
       <i class="fas fa-user"></i>&nbsp;회원가입
     </a>&nbsp;
