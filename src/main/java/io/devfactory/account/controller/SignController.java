@@ -1,6 +1,8 @@
 package io.devfactory.account.controller;
 
 import static io.devfactory.global.utils.FunctionUtils.REDIRECT;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import io.devfactory.account.domain.Account;
 import io.devfactory.account.dto.request.AccountRequestView;
@@ -16,6 +18,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
@@ -35,7 +38,9 @@ public class SignController {
     return REDIRECT.apply("/");
   }
 
-  @GetMapping("/sign-in/form")
+  // 로그인 실패 시 핸들러에서 POST로 받기 위해...
+  @SuppressWarnings("squid:S3752")
+  @RequestMapping(value = "/sign-in/form", method = {GET, POST})
   public String signInView() {
     return "views/sign/signIn";
   }

@@ -13,23 +13,21 @@
 
       <div th:unless="${param.error eq null}" class="alert alert-danger">
         <strong>Failed to login.</strong><br/>
-        <span th:text="${#request.getAttribute('errorMsg')}"
-              th:unless="${#request.getAttribute('errorMsg') eq null}">Invalid credentials</span>
+        <span th:text="${#request.getAttribute('errorMessage')}"
+              th:unless="${#request.getAttribute('errorMessage') eq null}"></span>
       </div>
 
-      <div th:unless="${param.logout eq null}" class="alert alert-success">
-        You have been logged out.
-      </div>
-
-      <div th:unless="${param.expired eq null}" class="alert alert-success">
+      <!--<div th:unless="${param.expired eq null}" class="alert alert-success">
         <strong>Session Expired</strong><br/>
         <span>
           You have been forcibly logged out due to multiple sessions on the same account<br/>
           (only one active session per user is allowed).
         </span>
-      </div>
+      </div>-->
 
       <form th:action="@{/login}" method="post" class="form-sign-in">
+        <!--/* 추가 파라미터 테스트용 */-->
+        <input type="hidden" name="secretKey" value="secret">
         <div class="form-label-group">
           <input type="email" id="inputEmail" name="username" class="form-control" placeholder="이메일 주소" autofocus>
           <label for="inputEmail">이메일 주소</label>

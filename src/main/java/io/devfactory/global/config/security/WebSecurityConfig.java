@@ -1,5 +1,6 @@
 package io.devfactory.global.config.security;
 
+import io.devfactory.global.config.security.common.FormAuthenticationDetailsSource;
 import io.devfactory.global.config.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -13,12 +14,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserDetailsService userDetailsService;
+
+  private final FormAuthenticationDetailsSource formAuthenticationDetailsSource;
+  private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+  private final AuthenticationFailureHandler customAuthenticationFailureHandler;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -70,6 +77,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .loginPage("/sign-in/form")
         .loginProcessingUrl("/login")
         .defaultSuccessUrl("/")
+        .authenticationDetailsSource(formAuthenticationDetailsSource)
+        .successHandler(customAuthenticationSuccessHandler)
+        .failureHandler(customAuthenticationFailureHandler)
         .permitAll()
       .and()
 

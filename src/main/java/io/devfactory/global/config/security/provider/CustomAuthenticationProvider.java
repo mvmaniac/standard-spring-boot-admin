@@ -1,11 +1,14 @@
 package io.devfactory.global.config.security.provider;
 
 import io.devfactory.account.domain.Account;
+import io.devfactory.global.config.security.common.FormWebAuthenticationDetails;
 import io.devfactory.global.config.security.service.AccountContext;
 import java.util.Collection;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,6 +35,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     if (!account.isMatches(passwordEncoder, password)) {
       throw new BadCredentialsException("BadCredentialsException...");
     }
+
+    // @formatter:off
+    final FormWebAuthenticationDetails details = (FormWebAuthenticationDetails) authentication.getDetails();
+    final String secretKey = details.getSecretKey();
+
+    if (Objects.isNull(secretKey) || !"secret".equals(secretKey)) {
+      throw new InsufficientAuthenticationException("InsufficientAuthenticationException...");
+    }
+    // @formatter:on
 
     return new UsernamePasswordAuthenticationToken(account, null, authorities);
   }

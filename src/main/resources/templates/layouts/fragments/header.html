@@ -48,7 +48,7 @@
 
 <div class="navbar navbar-dark bg-dark shadow-sm d-flex justify-content-end">
   <div sec:authorize="isAuthenticated()">
-    <span class="text-white align-middle" th:text="|${session?.member?.name}님 로그인|"></span>
+    <span class="text-white align-middle"><strong sec:authentication="principal.email"></strong>님 로그인</span>
     &nbsp;
     <form th:action="@{/sign-out}" method="post" class="d-inline-block">
       <!--/* csrf 를 활성화 하면 logout 은 post 로 해야 함 */-->
