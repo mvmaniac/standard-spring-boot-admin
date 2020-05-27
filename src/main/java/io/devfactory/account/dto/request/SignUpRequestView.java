@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class AccountRequestView {
+public class SignUpRequestView {
 
   private String username;
   private String email;

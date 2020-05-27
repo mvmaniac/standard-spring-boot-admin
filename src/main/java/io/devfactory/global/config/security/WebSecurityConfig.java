@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,12 +19,12 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
+@Order(1)
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserDetailsService userDetailsService;
 
-  private final FormAuthenticationDetailsSource formAuthenticationDetailsSource;
   private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
   private final AuthenticationFailureHandler customAuthenticationFailureHandler;
 
@@ -33,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public AuthenticationProvider authenticationProvider() {
+  public AuthenticationProvider customAuthenticationProvider() {
     return new CustomAuthenticationProvider(passwordEncoder(), userDetailsService);
   }
 
@@ -46,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(AuthenticationManagerBuilder auth) {
     // @formatter:off
     auth
-      .authenticationProvider(authenticationProvider())
+      .authenticationProvider(customAuthenticationProvider())
     ;
     // @formatter:on
   }
@@ -77,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .loginPage("/sign-in/form")
         .loginProcessingUrl("/login")
         .defaultSuccessUrl("/")
-        .authenticationDetailsSource(formAuthenticationDetailsSource)
+        .authenticationDetailsSource(new FormAuthenticationDetailsSource())
         .successHandler(customAuthenticationSuccessHandler)
         .failureHandler(customAuthenticationFailureHandler)
         .permitAll()

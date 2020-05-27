@@ -5,7 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import io.devfactory.account.domain.Account;
-import io.devfactory.account.dto.request.AccountRequestView;
+import io.devfactory.account.dto.request.SignUpRequestView;
 import io.devfactory.account.mapper.AccountMapper;
 import io.devfactory.account.service.UserService;
 import java.util.Objects;
@@ -32,7 +32,7 @@ public class SignController {
   }
 
   @PostMapping("/sign-up")
-  public String signUp(AccountRequestView requestView) {
+  public String signUp(SignUpRequestView requestView) {
     final Account account = AccountMapper.INSTANCE.toAccount(requestView);
     userService.saveUser(account);
     return REDIRECT.apply("/");

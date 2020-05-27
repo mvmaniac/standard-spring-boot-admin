@@ -49,7 +49,7 @@ public class Account extends BaseEntity {
   @Column(name = "account_age")
   private int age;
 
-  @Column(name = "account_role", length = 10)
+  @Column(name = "account_role", length = 20)
   private String role;
 
   @Builder(builderMethodName = "of")
@@ -66,7 +66,7 @@ public class Account extends BaseEntity {
     return this;
   }
 
-  public boolean isMatches(PasswordEncoder encoder, String rawPassword) {
+  public boolean matchPassword(PasswordEncoder encoder, String rawPassword) {
     return password.isMatches(encoder, rawPassword);
   }
 
