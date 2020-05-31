@@ -1,5 +1,28 @@
-INSERT INTO tb_account (account_id, created_date, updated_date, created_by, updated_by, account_age, account_email, account_password, account_role, account_username)
+INSERT INTO tb_role (role_id, role_name, role_description, created_by, updated_by, created_date, updated_date)
 VALUES
-(nextval('seq_tb_account'), '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580', null, null, 30, 'dev1@gmail.com', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'ROLE_USER', 'dev1'),
-(nextval('seq_tb_account'), '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580', null, null, 30, 'manager@gmail.com', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'ROLE_MANAGER', 'manager'),
-(nextval('seq_tb_account'), '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580', null, null, 30, 'admin@gmail.com', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'ROLE_ADMIN', 'admin');
+(nextval('seq_tb_role'), 'ROLE_ADMIN', '관리자', 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_role'), 'ROLE_MANAGER', '매니저 권한', 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_role'), 'ROLE_USER', '사용자 권한', 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+;
+
+INSERT INTO tb_account (account_id, account_username, account_password, account_email, account_age, created_by, updated_by, created_date, updated_date)
+VALUES
+(nextval('seq_tb_account'), 'admin', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'admin@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_account'), 'dev1', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'dev1@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_account'), 'manager', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'manager@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+;
+
+INSERT INTO tb_account_role (account_role_id, account_id, role_id, created_by, updated_by, created_date, updated_date)
+VALUES
+(nextval('seq_tb_account_role'), 1, 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+;
+
+INSERT INTO tb_resources (resources_id, resources_name, http_method, resources_type, order_no, created_by, updated_by, created_date, updated_date)
+VALUES
+(nextval('seq_tb_resources'), '/admin/**', '', 'url', 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+;
+
+INSERT INTO tb_resources_role (resources_role_id, resources_id, role_id, created_by, updated_by, created_date, updated_date)
+VALUES
+(nextval('seq_tb_resources_role'), 1, 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+;

@@ -13,7 +13,7 @@ public class UserController {
 
   private final UserService userService;
 
-  @GetMapping("mypage")
+  @GetMapping("/mypage")
   public String myPage() {
     return "views/user/mypage";
   }

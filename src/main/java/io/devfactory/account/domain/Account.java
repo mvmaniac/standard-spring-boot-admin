@@ -1,24 +1,27 @@
 package io.devfactory.account.domain;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.GenerationType.SEQUENCE;
+import static lombok.AccessLevel.PROTECTED;
+
 import io.devfactory.account.model.Password;
 import io.devfactory.global.common.model.BaseEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import java.util.Objects;
-
-import static javax.persistence.GenerationType.SEQUENCE;
-import static lombok.AccessLevel.PROTECTED;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.CollectionUtils;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
@@ -49,16 +52,16 @@ public class Account extends BaseEntity {
   @Column(name = "account_age")
   private int age;
 
-  @Column(name = "account_role", length = 20)
-  private String role;
+  @OneToMany(mappedBy = "account", cascade = ALL)
+  private Set<AccountRole> roles = new HashSet<>();
 
   @Builder(builderMethodName = "of")
-  private Account(String username, String password, String email, int age, String role) {
+  private Account(String username, String password, String email, int age, Set<AccountRole> roles) {
     this.username = username;
     this.password = new Password(password);
     this.email = email;
     this.age = age;
-    this.role = Objects.isNull(role) ? "ROLE_USER" : role;
+    this.roles = CollectionUtils.isEmpty(roles) ? new HashSet<>() : roles;
   }
 
   public Account encodePassword(PasswordEncoder encoder) {
@@ -68,6 +71,11 @@ public class Account extends BaseEntity {
 
   public boolean matchPassword(PasswordEncoder encoder, String rawPassword) {
     return password.isMatches(encoder, rawPassword);
+  }
+
+  public void addRole(AccountRole role) {
+    this.roles.add(role);
+    role.changeAccount(this);
   }
 
 }

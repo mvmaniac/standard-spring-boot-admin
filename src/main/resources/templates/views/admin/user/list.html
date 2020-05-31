@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
+
+<style th:ref="tabStyle"></style>
+
+<div th:ref="tabMain">
+  <span>account list</span>
+  <br/>
+  <a th:href="@{/admin/users/form(t=1)}">폼이동</a>
+</div>
+
+<script th:ref="tabJs" th:inline="javascript">
+  $(function () {
+    console.log('account list');
+  });
+</script>
+
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
+
+<style th:ref="tabStyle"></style>
+
+<div th:ref="tabMain">
+  <span>resource list</span>
+  <br/>
+  <a th:href="@{/admin/resources/form(t=3)}">폼이동</a>
+</div>
+
+<script th:ref="tabJs" th:inline="javascript">
+  $(function () {
+    console.log('resource list');
+  });
+</script>
+
+</html>
