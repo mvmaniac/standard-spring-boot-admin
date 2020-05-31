@@ -64,29 +64,14 @@
     $('#btnSignUp').click(function (evt) {
       evt.preventDefault();
 
-      if (!formValidation()) {
+      if (!validationForm()) {
         return;
       }
 
       $formSignUp.submit();
-
-      // $.ajax({
-      //   url: 'http://localhost:8080/sign-up',
-      //   type: 'POST',
-      //   contentType: 'application/json',
-      //   dataType: 'json',
-      //   data:formToJson()
-      // })
-      // .done(function (response, textStatus, jqXHR) {
-      //   console.log(response);
-      // })
-      // .fail(function (jqXHR, textStatus, error) {
-      //   console.error(textStatus, error);
-      // });
-
     });
 
-    function formValidation() {
+    function validationForm() {
       if (!$inputUsername.val()) {
         alertAndFocus($inputUsername, '이름을 입력해주세요.');
         return false;
@@ -104,20 +89,6 @@
 
       return true;
     }
-
-    function alertAndFocus($element, message) {
-      alert(message);
-      $element.focus();
-    }
-
-    // function formToJson() {
-    //   return JSON.stringify({
-    //     username: $inputUsername.val(),
-    //     email: $inputEmail.val(),
-    //     password: $inputPassword.val(),
-    //     age: $('#inputAge').val()
-    //   });
-    // }
   });
 </script>
 

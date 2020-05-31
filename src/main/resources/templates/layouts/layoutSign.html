@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
+  <!--/* ajax 에서 csrf 처리를 위해 서버에서 값을 받음 */-->
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <meta name="_csrf_token" th:content="${_csrf.token}"/>
+
   <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
 
   <link rel="stylesheet" th:href="@{/css/normalize.css}"/>
@@ -22,6 +26,8 @@
 
   <script th:src="@{/webjars/font-awesome/5.13.0/js/all.min.js}"></script>
   <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  <script th:src="@{/js/common.js}"></script>
+
   <script th:replace="${js}"></script>
 </body>
 <!--/* // @formatter:on */-->

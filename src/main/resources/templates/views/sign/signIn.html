@@ -29,8 +29,8 @@
         <!--/* 추가 파라미터 테스트용 */-->
         <input type="hidden" name="secretKey" value="secret">
         <div class="form-label-group">
-          <input type="email" id="inputEmail" name="username" class="form-control" placeholder="이메일 주소" autofocus>
-          <label for="inputEmail">이메일 주소</label>
+          <input type="email" id="inputUsername" name="username" class="form-control" placeholder="이메일 주소" autofocus>
+          <label for="inputUsername">이메일 주소</label>
         </div>
 
         <div class="form-label-group">
@@ -61,14 +61,61 @@
 </section>
 <!--// @formatter:on-->
 
-<script>
+<script th:inline="javascript">
   $(function () {
+    var $inputUsername = $('#inputUsername'),
+        $inputPassword = $('#inputPassword');
+
+    $('button.btn-sign').click(function (evt) {
+      evt.preventDefault();
+
+      if (!validationForm()) {
+        return;
+      }
+
+      $.ajax({
+        url: '[(@{/api/login})]',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: formToJson()
+      })
+      .done(function (response, textStatus, jqXHR) {
+        location.href = '[(@{/})]';
+      })
+      .fail(function (jqXHR, textStatus, error) {
+        console.error(textStatus, error);
+      });
+    });
+
     $('button.btn-google, button.btn-kakao').click(function (evt) {
+      evt.preventDefault();
       alert('현재는 구글, 카카오 아이디 로그인 지원하지 않습니다.')
       // var socialType = $(this).data('social');
       // evt.preventDefault();
       // location.href = "/oauth2/authorization/"+ socialType;
     });
+
+    function validationForm() {
+      if (!$inputUsername.val()) {
+        alertAndFocus($inputUsername, '이메일를 입력해주세요.');
+        return false;
+      }
+
+      if (!$inputPassword.val()) {
+        alertAndFocus($inputPassword, '비밀번호를 입력해주세요.');
+        return false;
+      }
+
+      return true;
+    }
+
+    function formToJson() {
+      return JSON.stringify({
+        username: $inputUsername.val(),
+        password: $inputPassword.val()
+      });
+    }
   });
 </script>
 

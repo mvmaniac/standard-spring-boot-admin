@@ -18,7 +18,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
   private final ObjectMapper objectMapper;
 
   public AjaxLoginProcessingFilter() {
-    super(new AntPathRequestMatcher("/api/login"));
+    super(new AntPathRequestMatcher("/api/login", "POST"));
     objectMapper = new ObjectMapper();
   }
 
@@ -44,6 +44,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
   }
 
   private boolean isAjax(HttpServletRequest request) {
+    // getHeader 값은 대소문자와 상관없이 가져옴
     return "XMLHttpRequest".equals(request.getHeader("x-requested-with"));
   }
 

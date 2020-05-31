@@ -3,9 +3,7 @@ package io.devfactory.global.config.security;
 import io.devfactory.global.config.security.common.AjaxLoginAuthenticationEntryPoint;
 import io.devfactory.global.config.security.filter.AjaxLoginProcessingFilter;
 import io.devfactory.global.config.security.provider.AjaxAuthenticationProvider;
-import io.devfactory.global.config.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -19,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 // TODO: config 를 하나로 통일? ajax 일 때도 csrf를 사용하도록?
 @RequiredArgsConstructor
@@ -39,10 +36,12 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     return new AjaxAuthenticationProvider(passwordEncoder, userDetailsService);
   }
 
+  // Custom Filter 를 만들어서 로그인 처리 하는 방법 1-1
+  // 현재는 bean으로 생성만 하고 사용하지 않음 아래처럼 addfilter를 해줘야 함 (1-2 참고)
   @Bean
   public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
     AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
-    
+
     ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManagerBean());
     ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(ajaxAuthenticationSuccessHandler);
     ajaxLoginProcessingFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler);
@@ -83,11 +82,18 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         .accessDeniedHandler(ajaxAccessDeniedHandler)
       .and()
 
-      .csrf()
-        .disable()
-
-      .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+      // Custom Filter 를 만들어서 로그인 처리 하는 방법 1-2
+      //.addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
     ;
+
+    // Custom Filter 가 아닌 Custom DSL로 설정 추가
+    http
+      .apply(new AjaxSecurityConfigurer<>())
+        .setAuthenticationManager(authenticationManagerBean())
+        .successHandlerAjax(ajaxAuthenticationSuccessHandler)
+        .failureHandlerAjax(ajaxAuthenticationFailureHandler)
+        .loginProcessingUrl("/api/login")
+      ;
     // @formatter:on
   }
 
