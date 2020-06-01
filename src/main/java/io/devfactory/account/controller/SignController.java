@@ -27,7 +27,7 @@ public class SignController {
   private final UserService userService;
 
   @GetMapping("/sign-up/form")
-  public String signUpView() {
+  public String viewSignUp() {
     return "views/sign/signUp";
   }
 
@@ -41,7 +41,7 @@ public class SignController {
   // 로그인 실패 시 핸들러에서 POST로 받기 위해...
   @SuppressWarnings("squid:S3752")
   @RequestMapping(value = "/sign-in/form", method = {GET, POST})
-  public String signInView() {
+  public String viewSignIn() {
     return "views/sign/signIn";
   }
 

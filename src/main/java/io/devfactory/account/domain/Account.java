@@ -1,5 +1,6 @@
 package io.devfactory.account.domain;
 
+import static java.util.stream.Collectors.joining;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
@@ -8,6 +9,7 @@ import io.devfactory.account.model.Password;
 import io.devfactory.global.common.model.BaseEntity;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -61,7 +63,8 @@ public class Account extends BaseEntity {
     this.password = new Password(password);
     this.email = email;
     this.age = age;
-    this.roles = CollectionUtils.isEmpty(roles) ? new HashSet<>() : roles;
+
+    changeRoles(roles);
   }
 
   public Account encodePassword(PasswordEncoder encoder) {
@@ -73,9 +76,19 @@ public class Account extends BaseEntity {
     return password.isMatches(encoder, rawPassword);
   }
 
-  public void addRole(AccountRole role) {
+  public Account addRole(AccountRole role) {
     this.roles.add(role);
     role.changeAccount(this);
+    return this;
+  }
+
+  public Account changeRoles(Set<AccountRole> roles) {
+    this.roles = CollectionUtils.isEmpty(roles) ? new HashSet<>() : roles;
+    return this;
+  }
+
+  public String getRoleNames() {
+    return this.getRoles().stream().map(AccountRole::getRoleName).collect(joining(","));
   }
 
 }
