@@ -4,10 +4,8 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
 
-import io.devfactory.account.model.Password;
 import io.devfactory.global.common.model.BaseEntity;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +17,6 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
@@ -49,13 +46,11 @@ public class Role extends BaseEntity {
   @OneToMany(mappedBy = "role", cascade = ALL)
   private Set<ResourcesRole> resources = new HashSet<>();
 
-  private Role(String name, String description) {
+  @Builder(builderMethodName = "create")
+  private Role(Long id, String name, String description) {
+    this.id = id;
     this.name = name;
     this.description = description;
-  }
-
-  public static Role of(String name, String description) {
-    return new Role(name, description);
   }
 
 }

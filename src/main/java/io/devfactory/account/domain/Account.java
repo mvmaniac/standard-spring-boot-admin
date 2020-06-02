@@ -9,7 +9,6 @@ import io.devfactory.account.model.Password;
 import io.devfactory.global.common.model.BaseEntity;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -24,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
@@ -57,8 +57,9 @@ public class Account extends BaseEntity {
   @OneToMany(mappedBy = "account", cascade = ALL)
   private Set<AccountRole> roles = new HashSet<>();
 
-  @Builder(builderMethodName = "of")
-  private Account(String username, String password, String email, int age, Set<AccountRole> roles) {
+  @Builder(builderMethodName = "create")
+  private Account(Long id, String username, String password, String email, int age, Set<AccountRole> roles) {
+    this.id = id;
     this.username = username;
     this.password = new Password(password);
     this.email = email;
@@ -76,9 +77,25 @@ public class Account extends BaseEntity {
     return password.isMatches(encoder, rawPassword);
   }
 
+  public String getPasswordValue() {
+    return password.getValue();
+  }
+
   public Account addRole(AccountRole role) {
     this.roles.add(role);
     role.changeAccount(this);
+    return this;
+  }
+
+  public Account changeAccount(Account changeAccount) {
+    this.username = changeAccount.getUsername();
+    this.email = changeAccount.getEmail();
+    this.age = changeAccount.getAge();
+
+    if (!StringUtils.isEmpty(changeAccount.getPasswordValue())) {
+      this.password = changeAccount.getPassword();
+    }
+
     return this;
   }
 
@@ -88,7 +105,7 @@ public class Account extends BaseEntity {
   }
 
   public String getRoleNames() {
-    return this.getRoles().stream().map(AccountRole::getRoleName).collect(joining(","));
+    return getRoles().stream().map(AccountRole::getRoleName).collect(joining(","));
   }
 
 }

@@ -50,7 +50,7 @@ public class Resources extends BaseEntity {
   @OneToMany(mappedBy = "resources", cascade = ALL)
   private Set<ResourcesRole> roles = new HashSet<>();
 
-  @Builder(builderMethodName = "of")
+  @Builder(builderMethodName = "create")
   private Resources(String name, String httpMethod, String type, int orderNo,
       Set<ResourcesRole> roles) {
     this.name = name;

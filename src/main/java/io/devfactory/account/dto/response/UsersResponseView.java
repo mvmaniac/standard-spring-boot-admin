@@ -14,10 +14,13 @@ public class UsersResponseView {
   private int count;
   private List<UserResponseView> users;
 
-  @Builder(builderMethodName = "of")
   private UsersResponseView(List<UserResponseView> views) {
     this.count = views.size();
     this.users = views;
   }
-  
+
+  public static UsersResponseView of(List<UserResponseView> views) {
+    return new UsersResponseView(views);
+  }
+
 }

@@ -9,24 +9,20 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
 @Getter
-public class UserResponseView {
+public class RoleResponseView {
 
   private Long id;
-  private String username;
-  private String email;
-  private int age;
-  private String roleName;
+  private String name;
+  private String description;
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 
   @Builder(builderMethodName = "create")
-  private UserResponseView(Long id, String username, String email, int age, String roleName,
-      LocalDateTime createdDate, LocalDateTime updatedDate) {
+  public RoleResponseView(Long id, String name, String description, LocalDateTime createdDate,
+      LocalDateTime updatedDate) {
     this.id = id;
-    this.username = username;
-    this.email = email;
-    this.age = age;
-    this.roleName = roleName;
+    this.name = name;
+    this.description = description;
     this.createdDate = createdDate;
     this.updatedDate = updatedDate;
   }

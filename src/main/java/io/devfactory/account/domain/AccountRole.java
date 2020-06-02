@@ -1,8 +1,12 @@
 package io.devfactory.account.domain;
 
+import static java.util.stream.Collectors.toList;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.SEQUENCE;
+import static lombok.AccessLevel.PROTECTED;
+
 import io.devfactory.global.common.model.BaseEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,10 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.SEQUENCE;
-import static lombok.AccessLevel.PROTECTED;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
@@ -47,6 +49,10 @@ public class AccountRole extends BaseEntity {
 
   public static AccountRole of(Account account, Role role) {
     return new AccountRole(account , role);
+  }
+
+  public static List<AccountRole> ofList(Account account, List<Role> roles) {
+    return roles.stream().map(role -> of(account, role)).collect(toList());
   }
 
   public String getRoleName() {

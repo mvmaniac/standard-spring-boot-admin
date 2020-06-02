@@ -1,18 +1,18 @@
 package io.devfactory.account.dto.request;
 
-import static lombok.AccessLevel.PROTECTED;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class SignUpRequestView {
+public class UserRequestView {
 
   private String email;
   private String username;
   private String password;
   private int age;
-  private String role;
+  private Long[] roles;
 
 }

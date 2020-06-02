@@ -1,14 +1,144 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, _)}">
+      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
 
-<div th:ref="tabMain">
-  <span>account form</span>
+<style th:ref="tabStyle">
+  hr {margin: 0 0 1em 0}
+</style>
+
+<div th:ref="tabMain" class="tab-main pt-3">
+  <input id="userId" type="hidden" th:value="${user?.id}">
+
+  <div class="form-group">
+    <label for="email" class="font-weight-bold">이메일</label>
+    <input th:value="${user?.email}" type="text" id="email" class="form-control" required>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="username" class="font-weight-bold">이름</label>
+    <input th:value="${user?.username}" type="text" id="username" class="form-control" required>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="password" class="font-weight-bold">비밀번호</label>
+    <input type="password" id="password" class="form-control">
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="age" class="font-weight-bold">나이</label>
+    <input th:value="${user?.age}" type="number" id="age" class="form-control">
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group mb-0">
+    <span class="font-weight-bold">권한목록</span>
+    <div th:each="role, status: ${roles}">
+      <input th:id="|roles${status.index}|" th:value="${role.id}"
+             th:checked="${user.roleName.contains(role.name)}"
+             type="checkbox" id="roles" name="roles"/>
+      <label th:for="|roles${status.index}|" for="roles" th:text="${role.name}"></label>
+    </div>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <hr/>
+
+  <div class="form-group mb-0 d-flex justify-content-between">
+    <span><a href="javascript:void(0)" id="btnList" class="btn btn-secondary btn-sm" title="목록으로">
+      <i class="fas fa-list"></i>&nbsp;목록으로</a></span>
+    <span>
+
+      <a th:unless="${user?.id}" href="javascript:void(0)" id="btnInsert"
+         class="btn btn-primary btn-sm" title="저장"><i class="fas fa-edit"></i>&nbsp;저장</a>
+      <a th:if="${user?.id}" href="javascript:void(0)" id="btnUpdate"
+         class="btn btn-info btn-sm" title="수정"><i class="fas fa-edit"></i>&nbsp;수정</a>
+    </span>
+  </div>
 </div>
 
 <script th:ref="tabJs" th:inline="javascript">
   $(function () {
-    console.log('account form');
+    var $email = $('#email'),
+        $username = $('#username'),
+        $password = $('#password'),
+        $age = $('#age');
+
+    $("#btnList").click(function () {
+      location.href = '[(@{/admin/users(t=1)})]';
+    });
+
+    $("#btnInsert").click(function () {
+      if (!formValidation()) {
+        return;
+      }
+
+      $.ajax({
+        url: '[(@{/api/admin/users})]/' + $('#userId').val(),
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: formToJson(),
+        success: function (response, textStatus, jqXHR) {
+          alert('게시글이 등록 되었습니다.');
+          console.log(response);
+        },
+        error: function (jqXHR, textStatus, error) {
+          console.error(textStatus, error);
+        }
+      });
+    });
+
+    $("#btnUpdate").click(function () {
+      if (!formValidation()) {
+        return;
+      }
+
+      $.ajax({
+        url: '[(@{/api/admin/users})]/' + $('#userId').val(),
+        type: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: formToJson(),
+        success: function (response, textStatus, jqXHR) {
+          alert('사용자 정보가 수정 되었습니다.');
+          console.log(response);
+        },
+        error: function (jqXHR, textStatus, error) {
+          console.error(textStatus, error);
+        }
+      });
+    });
+
+    function formValidation() {
+      if (!$email.val()) {
+        alert('이메일를 입력해주세요.');
+        $email.focus();
+        return false;
+      }
+
+      if (!$username.val()) {
+        alert('비밀번호를 입력해주세요.');
+        $username.focus();
+        return false;
+      }
+
+      return true;
+    }
+
+    function formToJson() {
+      return JSON.stringify({
+        email: $email.val(),
+        username: $username.val(),
+        password: $password.val(),
+        age: $age.val(),
+        roles: $('input[name=roles]:checked').map(function () {
+          return $(this).val();
+        }).get()
+      });
+    }
   });
 </script>
 

@@ -17,6 +17,17 @@
     section .nav-link.active {
       font-weight: bold;
     }
+
+    /* css overwrite */
+    .nav-tabs {
+      border-bottom-color: #d1d4d7;
+    }
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+      color: #fff;
+      background-color: #343a40;
+      border-color: #343a40;
+    }
   </style>
   <style th:replace="${tabStyle}"></style>
 </head>
@@ -25,23 +36,28 @@
 <section th:ref="main" class="section-main">
   <ul class="nav nav-tabs" id="myTab">
     <li class="nav-item" data-no="1">
-      <a th:classappend="${#strings.equals(param.t, '1')} ? 'active'" class="nav-link" id="manageUserTab" data-toggle="tab"
+      <a th:classappend="${#strings.equals(param.t, '1')} ? 'active'" class="nav-link"
+         id="manageUserTab" data-toggle="tab"
          href="javascript:void(0)">사용자 관리</a>
     </li>
     <li class="nav-item" data-no="2">
-      <a th:classappend="${#strings.equals(param.t, '2')} ? 'active'" class="nav-link" id="manageRoleTab" data-toggle="tab"
+      <a th:classappend="${#strings.equals(param.t, '2')} ? 'active'" class="nav-link"
+         id="manageRoleTab" data-toggle="tab"
          href="javascript:void(0)">권한 관리</a>
     </li>
     <li class="nav-item" data-no="3">
-      <a th:classappend="${#strings.equals(param.t, '3')} ? 'active'" class="nav-link" id="manageResourceTab" data-toggle="tab"
+      <a th:classappend="${#strings.equals(param.t, '3')} ? 'active'" class="nav-link"
+         id="manageResourceTab" data-toggle="tab"
          href="javascript:void(0)">리소스 관리</a>
     </li>
     <li class="nav-item" data-no="4">
-      <a th:classappend="${#strings.equals(param.t, '4')} ? 'active'" class="nav-link" id="manageAuthorityHierarchyTab" data-toggle="tab"
+      <a th:classappend="${#strings.equals(param.t, '4')} ? 'active'" class="nav-link"
+         id="manageAuthorityHierarchyTab" data-toggle="tab"
          href="javascript:void(0)">권한 계층 관리</a>
     </li>
     <li class="nav-item" data-no="5">
-      <a th:classappend="${#strings.equals(param.t, '5')} ? 'active'" class="nav-link" id="manageIpTab" data-toggle="tab"
+      <a th:classappend="${#strings.equals(param.t, '5')} ? 'active'" class="nav-link"
+         id="manageIpTab" data-toggle="tab"
          href="javascript:void(0)">IP 관리</a>
     </li>
   </ul>
@@ -53,28 +69,28 @@
 <script th:inline="javascript">
   $(function () {
     $('section.section-main > ul > li').click(function () {
-       var tabNo = $(this).data('no'),
-           url;
+      var tabNo = $(this).data('no'),
+          url;
 
-       switch (tabNo) {
-         case 1:
-           url = '[(@{/admin/users})]';
-           break;
-         case 2:
-           url = '[(@{/admin/roles})]';
-           break;
-         case 3:
-           url = '[(@{/admin/resources})]';
-           break;
-         case 4:
-           url = '[(@{/admin/users})]';
-           break;
-         case 5:
-           url = '[(@{/admin/ip})]';
-           break;
-       }
+      switch (tabNo) {
+        case 1:
+          url = '[(@{/admin/users})]';
+          break;
+        case 2:
+          url = '[(@{/admin/roles})]';
+          break;
+        case 3:
+          url = '[(@{/admin/resources})]';
+          break;
+        case 4:
+          url = '[(@{/admin/users})]';
+          break;
+        case 5:
+          url = '[(@{/admin/ip})]';
+          break;
+      }
 
-       location.href = url + '?t='+ tabNo;
+      location.href = url + '?t=' + tabNo;
     });
   });
 </script>

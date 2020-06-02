@@ -15,7 +15,7 @@ public class LoginResponseView {
   private String email;
   private int age;
 
-  @Builder(builderMethodName = "of")
+  @Builder(builderMethodName = "create")
   private LoginResponseView(Long id, String username, String email, int age) {
     this.id = id;
     this.username = username;
