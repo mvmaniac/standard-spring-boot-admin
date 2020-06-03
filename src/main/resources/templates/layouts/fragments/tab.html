@@ -5,17 +5,19 @@
 <head>
   <title>Admin Home - DevFactory</title>
   <style>
-    section a {
+    section ul > li a {
       color: black;
     }
 
-    section a:hover {
+    section ul > li a:hover {
       color: black;
       font-weight: bold;
+      border-bottom-color: #d1d4d7 !important;
     }
 
     section .nav-link.active {
       font-weight: bold;
+      border-bottom-color: #343a40 !important;
     }
 
     /* css overwrite */
@@ -34,7 +36,7 @@
 <body>
 
 <section th:ref="main" class="section-main">
-  <ul class="nav nav-tabs" id="myTab">
+  <ul class="nav nav-tabs">
     <li class="nav-item" data-no="1">
       <a th:classappend="${#strings.equals(param.t, '1')} ? 'active'" class="nav-link"
          id="manageUserTab" data-toggle="tab"
@@ -61,7 +63,7 @@
          href="javascript:void(0)">IP 관리</a>
     </li>
   </ul>
-  <div class="tab-content" id="myTabContent">
+  <div class="tab-content">
     <div th:insert="${tabMain}" class="tab-pane fade show active"></div>
   </div>
 </section>

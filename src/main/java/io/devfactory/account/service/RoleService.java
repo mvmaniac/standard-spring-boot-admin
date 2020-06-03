@@ -24,13 +24,19 @@ public class RoleService {
   }
 
   @Transactional
-  public Role save(Role role) {
+  public Role saveRole(Role role) {
     final Role savedRole = roleRepository.save(role);
     return findRoleById(savedRole.getId());
   }
 
   @Transactional
-  public void deleteById(Long roleId) {
+  public void modifyRole(Role role) {
+    final Role findRole = findRoleById(role.getId());
+    findRole.changeRole(role);
+  }
+
+  @Transactional
+  public void deleteRoleById(Long roleId) {
     roleRepository.deleteById(roleId);
   }
 

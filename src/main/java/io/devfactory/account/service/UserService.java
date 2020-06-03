@@ -27,9 +27,10 @@ public class UserService {
 
   private final PasswordEncoder passwordEncoder;
 
-  @Transactional
-  public void saveUser(Account account) {
-    userRepository.save(account.encodePassword(passwordEncoder));
+  public Account findUserById(Long userId) {
+    final Account findAccount = userRepository.findById(userId)
+        .orElseThrow(EntityNotFoundException::new);
+    return changeRoles(findAccount);
   }
 
   public List<Account> findUsers() {
@@ -37,16 +38,14 @@ public class UserService {
     return findAccounts.stream().map(this::changeRoles).collect(toList());
   }
 
-  public Account findUserById(Long userId) {
-    final Account findAccount = userRepository.findById(userId)
-        .orElseThrow(EntityNotFoundException::new);
-    return changeRoles(findAccount);
+  @Transactional
+  public void saveUser(Account account) {
+    userRepository.save(account.encodePassword(passwordEncoder));
   }
 
   @Transactional
   public void modifyUser(Account account, List<Role> roles) {
-    final Account findAccount = userRepository.findById(account.getId())
-        .orElseThrow(EntityNotFoundException::new);
+    final Account findAccount = findUserById(account.getId());
     findAccount.changeAccount(account);
 
     userRepository.save(findAccount);
@@ -59,7 +58,8 @@ public class UserService {
   // FIXME: 더 좋은 방법...
   private Account changeRoles(Account account) {
     final Set<AccountRole> findAccountRoles = accountRoleRepository.findByAccount(account);
-    return account.changeRoles(findAccountRoles);
+    account.changeRoles(findAccountRoles);
+    return account;
   }
 
 }

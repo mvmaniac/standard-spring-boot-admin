@@ -87,7 +87,11 @@ public class Account extends BaseEntity {
     return this;
   }
 
-  public Account changeAccount(Account changeAccount) {
+  public String getRoleNames() {
+    return getRoles().stream().map(AccountRole::getRoleName).collect(joining(","));
+  }
+
+  public void changeAccount(Account changeAccount) {
     this.username = changeAccount.getUsername();
     this.email = changeAccount.getEmail();
     this.age = changeAccount.getAge();
@@ -95,17 +99,10 @@ public class Account extends BaseEntity {
     if (!StringUtils.isEmpty(changeAccount.getPasswordValue())) {
       this.password = changeAccount.getPassword();
     }
-
-    return this;
   }
 
-  public Account changeRoles(Set<AccountRole> roles) {
+  public void changeRoles(Set<AccountRole> roles) {
     this.roles = CollectionUtils.isEmpty(roles) ? new HashSet<>() : roles;
-    return this;
-  }
-
-  public String getRoleNames() {
-    return getRoles().stream().map(AccountRole::getRoleName).collect(joining(","));
   }
 
 }

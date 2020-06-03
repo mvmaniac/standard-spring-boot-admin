@@ -22,19 +22,19 @@
   </div>
 
   <div class="form-group">
-    <label for="password" class="font-weight-bold">비밀번호</label>
+    <label for="password">비밀번호<span class="text-muted">&nbsp;(Optional)</span></label>
     <input type="password" id="password" class="form-control">
     <div class="invalid-feedback d-block"></div>
   </div>
 
   <div class="form-group">
-    <label for="age" class="font-weight-bold">나이</label>
+    <label for="age">나이<span class="text-muted">&nbsp;(Optional)</span></label>
     <input th:value="${user?.age}" type="number" id="age" class="form-control">
     <div class="invalid-feedback d-block"></div>
   </div>
 
   <div class="form-group mb-0">
-    <span class="font-weight-bold">권한목록</span>
+    <label for="roles">권한<span class="text-muted">&nbsp;(Optional)</span></label>
     <div th:each="role, status: ${roles}">
       <input th:id="|roles${status.index}|" th:value="${role.id}"
              th:checked="${user.roleName.contains(role.name)}"
@@ -51,8 +51,6 @@
       <i class="fas fa-list"></i>&nbsp;목록으로</a></span>
     <span>
 
-      <a th:unless="${user?.id}" href="javascript:void(0)" id="btnInsert"
-         class="btn btn-primary btn-sm" title="저장"><i class="fas fa-edit"></i>&nbsp;저장</a>
       <a th:if="${user?.id}" href="javascript:void(0)" id="btnUpdate"
          class="btn btn-info btn-sm" title="수정"><i class="fas fa-edit"></i>&nbsp;수정</a>
     </span>
@@ -70,27 +68,6 @@
       location.href = '[(@{/admin/users(t=1)})]';
     });
 
-    $("#btnInsert").click(function () {
-      if (!formValidation()) {
-        return;
-      }
-
-      $.ajax({
-        url: '[(@{/api/admin/users})]/' + $('#userId').val(),
-        type: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: formToJson(),
-        success: function (response, textStatus, jqXHR) {
-          alert('게시글이 등록 되었습니다.');
-          console.log(response);
-        },
-        error: function (jqXHR, textStatus, error) {
-          console.error(textStatus, error);
-        }
-      });
-    });
-
     $("#btnUpdate").click(function () {
       if (!formValidation()) {
         return;
@@ -101,27 +78,25 @@
         type: 'PUT',
         contentType: 'application/json',
         dataType: 'json',
-        data: formToJson(),
-        success: function (response, textStatus, jqXHR) {
-          alert('사용자 정보가 수정 되었습니다.');
-          console.log(response);
-        },
-        error: function (jqXHR, textStatus, error) {
-          console.error(textStatus, error);
-        }
+        data: formToJson()
+      })
+      .done(function (response, textStatus, jqXHR) {
+        alert('사용자 정보가 수정 되었습니다.');
+        console.log(response);
+      })
+      .fail(function (jqXHR, textStatus, error) {
+        console.error(textStatus, error);
       });
     });
 
     function formValidation() {
       if (!$email.val()) {
-        alert('이메일를 입력해주세요.');
-        $email.focus();
+        alertAndFocus($email, '이메일를 입력해주세요.');
         return false;
       }
 
       if (!$username.val()) {
-        alert('비밀번호를 입력해주세요.');
-        $username.focus();
+        alertAndFocus($username, '이름을 입력해주세요.');
         return false;
       }
 

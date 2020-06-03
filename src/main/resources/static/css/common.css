@@ -35,6 +35,10 @@ body {
   padding: 1rem 0;
 }
 
+.table-responsive {
+  overflow-x: auto;
+}
+
 @media (min-width: 300px) {
   .wrap {
     -ms-grid-columns: 1fr;

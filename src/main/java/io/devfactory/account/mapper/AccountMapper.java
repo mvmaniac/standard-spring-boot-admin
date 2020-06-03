@@ -24,6 +24,7 @@ public abstract class AccountMapper {
 
   @Mapping(target = "roleName", expression = "java(account.getRoleNames())")
   public abstract UserResponseView toUserResponseView(Account account);
+
   public abstract List<UserResponseView> toUserResponseViewList(List<Account> accounts);
 
 }

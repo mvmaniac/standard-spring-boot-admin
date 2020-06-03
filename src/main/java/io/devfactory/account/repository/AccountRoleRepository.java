@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AccountRoleRepository extends JpaRepository<AccountRole, Long> {
 
   @EntityGraph(attributePaths = {"role"})
-
   Set<AccountRole> findByAccount(Account account);
+
   void deleteByAccount(Account account);
 
 }

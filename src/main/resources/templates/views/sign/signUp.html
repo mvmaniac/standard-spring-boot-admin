@@ -15,12 +15,12 @@
       <!-- th:action 으로 해줘야 자동으로 csrf가 코드가 삽입된 아니면 수동으로 넣어주어야 함 -->
       <form th:action="@{/sign-up}" id="formSignUp" class="form-sign-in" method="POST">
         <div class="form-label-group">
-          <input type="email" id="inputEmail" name="email" class="form-control" placeholder="이메일 주소" required>
+          <input type="email" id="inputEmail" name="email" class="form-control" placeholder="이메일 주소" required autofocus>
           <label for="inputEmail">이메일 주소</label>
         </div>
 
         <div class="form-label-group">
-          <input type="text" id="inputUsername" name="username" class="form-control" placeholder="이름" required autofocus>
+          <input type="text" id="inputUsername" name="username" class="form-control" placeholder="이름" required>
           <label for="inputUsername">이름</label>
           <div class="invalid-feedback d-block"></div>
         </div>

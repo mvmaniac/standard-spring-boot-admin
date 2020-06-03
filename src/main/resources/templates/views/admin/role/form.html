@@ -1,14 +1,108 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, _)}">
+      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
 
-<div th:ref="tabMain">
-  <span>role form</span>
+<style th:ref="tabStyle">
+  hr {margin: 0 0 1em 0}
+</style>
+
+<div th:ref="tabMain" class="tab-main pt-3">
+  <input id="roleId" type="hidden" th:value="${role?.id}">
+
+  <div class="form-group">
+    <label for="name" class="font-weight-bold">권한명</label>
+    <input th:value="${role?.name}" type="text" id="name" class="form-control" required>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">권한설명<span class="text-muted">&nbsp;(Optional)</span></label>
+    <input th:value="${role?.description}" type="text" id="description" class="form-control" required>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <hr/>
+
+  <div class="form-group mb-0 d-flex justify-content-between">
+    <span><a href="javascript:void(0)" id="btnList" class="btn btn-secondary btn-sm" title="목록으로">
+      <i class="fas fa-list"></i>&nbsp;목록으로</a></span>
+    <span>
+
+      <a th:unless="${role?.id}" href="javascript:void(0)" id="btnInsert"
+         class="btn btn-primary btn-sm" title="저장"><i class="fas fa-edit"></i>&nbsp;저장</a>
+      <a th:if="${role?.id}" href="javascript:void(0)" id="btnUpdate"
+         class="btn btn-info btn-sm" title="수정"><i class="fas fa-edit"></i>&nbsp;수정</a>
+    </span>
+  </div>
 </div>
 
 <script th:ref="tabJs" th:inline="javascript">
   $(function () {
-    console.log('role form');
+    var roleId = $('#roleId').val(),
+        $name = $('#name'),
+        $description = $('#description');
+
+    $("#btnList").click(function () {
+      location.href = '[(@{/admin/roles(t=2)})]';
+    });
+
+    $("#btnInsert").click(function () {
+      if (!formValidation()) {
+        return;
+      }
+
+      $.ajax({
+        url: '[(@{/api/admin/roles})]/',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: formToJson()
+      })
+      .done(function (response, textStatus, jqXHR) {
+        alert('권한이 등록 되었습니다.');
+        $('#btnList').trigger('click');
+      })
+      .fail(function (jqXHR, textStatus, error) {
+        console.error(textStatus, error);
+      });
+    });
+
+    $("#btnUpdate").click(function () {
+      if (!formValidation()) {
+        return;
+      }
+
+      $.ajax({
+        url: '[(@{/api/admin/roles})]/' + roleId,
+        type: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: formToJson()
+      })
+      .done(function (response, textStatus, jqXHR) {
+        alert('권한 정보가 수정 되었습니다.');
+        console.log(response);
+      })
+      .fail(function (jqXHR, textStatus, error) {
+        console.error(textStatus, error);
+      });
+    });
+
+    function formValidation() {
+      if (!$name.val()) {
+        alertAndFocus($name, '권한명을 입력해주세요.');
+        return false;
+      }
+
+      return true;
+    }
+
+    function formToJson() {
+      return JSON.stringify({
+        name: $name.val(),
+        description: $description.val()
+      });
+    }
   });
 </script>
 

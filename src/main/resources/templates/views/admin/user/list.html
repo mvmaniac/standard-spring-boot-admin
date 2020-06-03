@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, _, _)}">
 
-<div th:ref="tabMain" th:object="${result}" class="table-responsive" style="overflow-x: auto">
+<div th:ref="tabMain" th:object="${result}" class="table-responsive">
   <table class="table table-hover table-bordered table-dark">
     <caption class="d-none">사용자 관리 목록</caption>
     <colgroup>

@@ -43,14 +43,16 @@ public class Role extends BaseEntity {
   @OneToMany(mappedBy = "role", cascade = ALL)
   private Set<AccountRole> accounts = new HashSet<>();
 
-  @OneToMany(mappedBy = "role", cascade = ALL)
-  private Set<ResourcesRole> resources = new HashSet<>();
-
   @Builder(builderMethodName = "create")
   private Role(Long id, String name, String description) {
     this.id = id;
     this.name = name;
     this.description = description;
+  }
+
+  public void changeRole(Role role) {
+    this.name = role.getName();
+    this.description = role.getDescription();
   }
 
 }

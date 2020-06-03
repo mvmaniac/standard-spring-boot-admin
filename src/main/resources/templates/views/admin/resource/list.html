@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
+      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, _, _)}">
 
-<style th:ref="tabStyle"></style>
+<div th:ref="tabMain" th:object="${result}" class="table-responsive">
+  <table class="table table-hover table-bordered table-dark">
+    <caption class="d-none">리소스 관리 목록</caption>
+    <colgroup>
+      <col style="width: 14%">
+      <col style="width: 14%">
+      <col style="width: 14%">
+      <col style="width: 14%">
+      <col style="width: 14%">
+      <col style="width: 14%">
+      <col style="width: 14%">
+    </colgroup>
+    <thead>
+    <tr>
+      <th scope="col">리소스 명</th>
+      <th scope="col">리소스 타입</th>
+      <th scope="col">http 메소드</th>
+      <th scope="col">순서</th>
+      <th scope="col">권한</th>
+      <th scope="col">등록일</th>
+      <th scope="col">수정일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="*{count eq 0}">
+      <td colspan="6" class="font-weight-bold text-center col-span" data-title="">리소스 관리 목록이 없습니다.</td>
+    </tr>
+    <tr th:each="resource: *{resources}">
+      <td data-title="리소스 명">
+        <a th:href="@{/admin/resources/form/{id}(t='3',id=${resource.id})}" th:text="${resource.name}" class="text-white"></a>
+      </td>
+      <td th:text="${resource.type}" data-title="리소스 타입"></td>
+      <td th:text="${resource.httpMethod}" data-title="http 메소드"></td>
+      <td th:text="${resource.orderNo}" data-title="순서"></td>
+      <td th:text="${resource.roleName}" data-title="권한"></td>
+      <td th:text="${#temporals.format(resource.createdDate, 'yyyy-mm-dd HH:mm:ss')}" data-title="등록일"></td>
+      <td th:text="${#temporals.format(resource.updatedDate, 'yyyy-mm-dd HH:mm:ss')}" data-title="수정일"></td>
+    </tr>
+    </tbody>
+  </table>
 
-<div th:ref="tabMain">
-  <span>resource list</span>
-  <br/>
-  <a th:href="@{/admin/resources/form(t=3)}">폼이동</a>
+  <div class="d-flex justify-content-end">
+    <a th:href="@{/admin/resources/form(t='3')}" class="btn btn-primary btn-sm" title="등록">
+      <i class="fas fa-pen"></i>&nbsp;등록</a>
+  </div>
 </div>
-
-<script th:ref="tabJs" th:inline="javascript">
-  $(function () {
-    console.log('resource list');
-  });
-</script>
 
 </html>

@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
+      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, _, _)}">
 
-<style th:ref="tabStyle"></style>
+<div th:ref="tabMain" th:object="${result}" class="table-responsive">
+  <table class="table table-hover table-bordered table-dark">
+    <caption class="d-none">권한 관리 목록</caption>
+    <colgroup>
+      <col style="width: 50%">
+      <col style="width: 50%">
+    </colgroup>
+    <thead>
+    <tr>
+      <th scope="col">권한명</th>
+      <th scope="col">권한설명</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="*{count eq 0}">
+      <td colspan="6" class="font-weight-bold text-center col-span" data-title="">권한 관리 목록이 없습니다.</td>
+    </tr>
+    <tr th:each="role: *{roles}">
+      <td data-title="권한명">
+        <a th:href="@{/admin/roles/form/{id}(t='2',id=${role.id})}" th:text="${role.name}" class="text-white"></a>
+      </td>
+      <td th:text="${role.description}" data-title="권한설명"></td>
+    </tr>
+    </tbody>
+  </table>
 
-<div th:ref="tabMain">
-  <span>role list</span>
-  <br/>
-  <a th:href="@{/admin/roles/form(t=2)}">폼이동</a>
+  <div class="d-flex justify-content-end">
+    <a th:href="@{/admin/roles/form(t='2')}" class="btn btn-primary btn-sm" title="등록">
+      <i class="fas fa-pen"></i>&nbsp;등록</a>
+  </div>
 </div>
-
-<script th:ref="tabJs" th:inline="javascript">
-  $(function () {
-    console.log('role list');
-  });
-</script>
 
 </html>

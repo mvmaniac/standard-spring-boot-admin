@@ -1,14 +1,150 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, _)}">
+      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
 
-<div th:ref="tabMain">
-  <span>resource form</span>
+<style th:ref="tabStyle">
+  hr {
+    margin: 0 0 1em 0
+  }
+</style>
+
+<div th:ref="tabMain" class="tab-main pt-3">
+  <input id="resourceId" type="hidden" th:value="${resource?.id}">
+
+  <div class="form-group">
+    <label for="name" class="font-weight-bold">리소스 명</label>
+    <input th:value="${resource?.name}" type="text" id="name" class="form-control" required>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="type" class="font-weight-bold">리소스 타입</label>
+    <input th:value="${resource?.type}" type="text" id="type" class="form-control" required>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="httpMethod">http 메소드<span class="text-muted">&nbsp;(Optional)</span></label>
+    <input th:value="${resource?.httpMethod}" type="text" id="httpMethod" class="form-control">
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="orderNo" class="font-weight-bold">순서</label>
+    <input th:value="${resource?.orderNo}" type="number" id="orderNo" class="form-control">
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="roleId">권한<span class="text-muted">&nbsp;(Optional)</span></label>
+    <select id="roleId" class="form-control">
+      <option value="">--선택--</option>
+      <option th:each="role: ${roles}"
+              th:value="${role.id}" th:text="${role.name}"
+              th:selected="${resource?.roleId eq role.id}">
+      </option>
+    </select>
+    <div class="invalid-feedback d-block"></div>
+  </div>
+
+  <hr/>
+
+  <div class="form-group mb-0 d-flex justify-content-between">
+    <span><a href="javascript:void(0)" id="btnList" class="btn btn-secondary btn-sm" title="목록으로">
+      <i class="fas fa-list"></i>&nbsp;목록으로</a></span>
+    <span>
+
+      <a th:unless="${resource?.id}" href="javascript:void(0)" id="btnInsert"
+         class="btn btn-primary btn-sm" title="저장"><i class="fas fa-edit"></i>&nbsp;저장</a>
+      <a th:if="${resource?.id}" href="javascript:void(0)" id="btnUpdate"
+         class="btn btn-info btn-sm" title="수정"><i class="fas fa-edit"></i>&nbsp;수정</a>
+    </span>
+  </div>
 </div>
 
 <script th:ref="tabJs" th:inline="javascript">
   $(function () {
-    console.log('resource form');
+    var $resourceId = $('#resourceId'),
+        $name = $('#name'),
+        $type = $('#type'),
+        $httpMethod = $('#httpMethod'),
+        $orderNo = $('#orderNo'),
+        $roleId = $('#roleId');
+
+    $("#btnList").click(function () {
+      location.href = '[(@{/admin/resources(t=3)})]';
+    });
+
+    $("#btnInsert").click(function () {
+      if (!formValidation()) {
+        return;
+      }
+
+      $.ajax({
+        url: '[(@{/api/admin/resources})]/',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: formToJson()
+      })
+      .done(function (response, textStatus, jqXHR) {
+        alert('리소스가 등록 되었습니다.');
+        $('#btnList').trigger('click');
+      })
+      .fail(function (jqXHR, textStatus, error) {
+        console.error(textStatus, error);
+      });
+    });
+
+    $("#btnUpdate").click(function () {
+      if (!formValidation()) {
+        return;
+      }
+
+      $.ajax({
+        url: '[(@{/api/admin/resources})]/' + $resourceId.val(),
+        type: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: formToJson()
+      })
+      .done(function (response, textStatus, jqXHR) {
+        alert('리소스 정보가 수정 되었습니다.');
+        console.log(response);
+      })
+      .fail(function (jqXHR, textStatus, error) {
+        console.error(textStatus, error);
+      });
+    });
+
+    function formValidation() {
+      if (!$name.val()) {
+        alertAndFocus($name, '리소스 명을 입력해주세요.');
+        return false;
+      }
+
+      if (!$type.val()) {
+        alertAndFocus($type, '리소스 타입을 입력해주세요.');
+        return false;
+      }
+
+      if (!$orderNo.val()) {
+        alertAndFocus($orderNo, '순서를 입력해주세요.');
+        return false;
+      }
+
+      return true;
+    }
+
+    function formToJson() {
+      return JSON.stringify({
+        name: $name.val(),
+        type: $type.val(),
+        password: $httpMethod.val(),
+        orderNo: $orderNo.val(),
+        roleId: $roleId.val()
+      });
+    }
   });
 </script>
 

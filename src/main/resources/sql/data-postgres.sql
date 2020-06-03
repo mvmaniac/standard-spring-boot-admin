@@ -17,12 +17,7 @@ VALUES
 (nextval('seq_tb_account_role'), 1, 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
 ;
 
-INSERT INTO tb_resources (resources_id, resources_name, http_method, resources_type, order_no, created_by, updated_by, created_date, updated_date)
+INSERT INTO tb_resource (resource_id, resource_name, http_method, resource_type, order_no, role_id, created_by, updated_by, created_date, updated_date)
 VALUES
-(nextval('seq_tb_resources'), '/admin/**', '', 'url', 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
-;
-
-INSERT INTO tb_resources_role (resources_role_id, resources_id, role_id, created_by, updated_by, created_date, updated_date)
-VALUES
-(nextval('seq_tb_resources_role'), 1, 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+(nextval('seq_tb_resource'), '/admin/**', '', 'url', 1, 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
 ;
