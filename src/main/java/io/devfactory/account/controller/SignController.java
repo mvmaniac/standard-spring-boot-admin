@@ -48,7 +48,6 @@ public class SignController {
   // 로그아웃을 get 방식으로 할 경우 수동으로 해줘야 함
   @GetMapping("/sign-out")
   public String signOut(HttpServletRequest request, HttpServletResponse response) {
-
     final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (Objects.nonNull(authentication)) {

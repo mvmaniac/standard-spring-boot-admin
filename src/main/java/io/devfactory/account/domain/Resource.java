@@ -1,5 +1,7 @@
 package io.devfactory.account.domain;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
@@ -50,12 +52,13 @@ public class Resource extends BaseEntity {
   private Role role;
 
   @Builder(builderMethodName = "create")
-  private Resource(String name, String httpMethod, String type, int orderNo, Role role) {
+  private Resource(Long id, String name, String httpMethod, String type, int orderNo, Role role) {
+    this.id = id;
     this.name = name;
     this.httpMethod = httpMethod;
     this.type = type;
     this.orderNo = orderNo;
-    this.role = role;
+    this.role = (nonNull(role) && isNull(role.getId())) ? null : role;
   }
 
   public void changeResource(Resource resource) {
@@ -63,7 +66,8 @@ public class Resource extends BaseEntity {
     this.httpMethod = resource.getHttpMethod();
     this.type = resource.getType();
     this.orderNo = resource.getOrderNo();
-    this.role = resource.getRole();
+    this.role = (nonNull(resource.getRole()) && isNull(resource.getRole().getId())) ? null
+        : resource.getRole();
   }
 
 }

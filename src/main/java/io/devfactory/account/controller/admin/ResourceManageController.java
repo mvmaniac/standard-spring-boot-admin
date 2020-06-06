@@ -36,23 +36,28 @@ public class ResourceManageController {
   }
 
   @GetMapping("/form")
-  public String viewResourceForm() {
+  public String viewResourceForm(Model model) {
+    final List<RoleResponseView> rolesResponseView = getRoleResponseViews();
+    model.addAttribute("roles", rolesResponseView);
     return "views/admin/resource/form";
   }
 
   @GetMapping("/form/{id}")
   public String viewResourceForm(@PathVariable("id") Long resourceId, Model model) {
     final Resource resource = resourceService.findResourceById(resourceId);
+
     final ResourceResponseView resourceResponseView = ResourceMapper.INSTANCE
         .toResourceResponseView(resource);
-
-    final List<Role> roles = roleService.findRoles();
-    final List<RoleResponseView> rolesResponseView = RoleMapper.INSTANCE
-        .toRoleResponseViewList(roles);
+    final List<RoleResponseView> rolesResponseView = getRoleResponseViews();
 
     model.addAttribute("resource", resourceResponseView);
     model.addAttribute("roles", rolesResponseView);
     return "views/admin/resource/form";
+  }
+
+  private List<RoleResponseView> getRoleResponseViews() {
+    final List<Role> roles = roleService.findRoles();
+    return RoleMapper.INSTANCE.toRoleResponseViewList(roles);
   }
 
 }

@@ -36,8 +36,9 @@
   <div class="form-group mb-0">
     <label for="roles">권한<span class="text-muted">&nbsp;(Optional)</span></label>
     <div th:each="role, status: ${roles}">
+      <!--suppress ThymeleafVariablesResolveInspection -->
       <input th:id="|roles${status.index}|" th:value="${role.id}"
-             th:checked="${user.roleName.contains(role.name)}"
+             th:checked="${#custom.checkMatchRole(role.id, user.roles)}"
              type="checkbox" id="roles" name="roles"/>
       <label th:for="|roles${status.index}|" for="roles" th:text="${role.name}"></label>
     </div>

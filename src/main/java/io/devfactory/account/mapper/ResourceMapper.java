@@ -13,13 +13,15 @@ public abstract class ResourceMapper {
 
   public static final ResourceMapper INSTANCE = Mappers.getMapper(ResourceMapper.class);
 
+  @Mapping(source = "view.roleId", target = "role.id")
   public abstract Resource toResource(ResourceRequestView view);
 
+  @Mapping(source = "view.roleId", target = "role.id")
   public abstract Resource toResource(Long id, ResourceRequestView view);
 
   // RoleResponseView 객체로 내줘도 되나, 이런 형식으로 쓸 수 있음
-  @Mapping(target = "roleId", expression = "java(resource.getRole().getId())")
-  @Mapping(target = "roleName", expression = "java(resource.getRole().getName())")
+  @Mapping(source = "resource.role.id", target = "roleId")
+  @Mapping(source = "resource.role.name", target = "roleName")
   public abstract ResourceResponseView toResourceResponseView(Resource resource);
 
   public abstract List<ResourceResponseView> toResourceResponseViewList(List<Resource> resources);

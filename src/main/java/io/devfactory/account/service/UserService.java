@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -40,19 +41,29 @@ public class UserService {
 
   @Transactional
   public void saveUser(Account account) {
-    userRepository.save(account.encodePassword(passwordEncoder));
+    // TODO: 기본 롤 여부를 두어서 가져오기?
+    // 기본 롤을 만들어서 저장, 현재 아이디 3인 것이 기본 롤...
+    final AccountRole userRole = new AccountRole(account, Role.create().id(3L).build());
+
+    // AccountRole 를 만들때 account 넘기기 때문에 연관관계 편의 메소드를 사용하지 않음
+    account.encodePassword(passwordEncoder);
+    account.getRoles().add(userRole);
+
+    userRepository.save(account);
   }
 
   @Transactional
   public void modifyUser(Account account, List<Role> roles) {
-    final Account findAccount = findUserById(account.getId());
+    final Account findAccount = userRepository.findById(account.getId())
+        .orElseThrow(EntityNotFoundException::new);
+
     findAccount.changeAccount(account);
+    findAccount.getRoles().clear(); // 이렇게 삭제 하는 경우 삭제할 건수 만큼 쿼리가 날라감
 
-    userRepository.save(findAccount);
-
-    // TODO: 다 지우고 다시 등록 하는 거 말고 더 좋은 방법?
-    accountRoleRepository.deleteByAccount(findAccount);
-    accountRoleRepository.saveAll(AccountRole.ofList(findAccount, roles));
+    // TODO: 현재는 그냥 다 지우고 다시 등록하는 방법인데 더 좋은 방법?
+    if (!CollectionUtils.isEmpty(roles)) {
+      accountRoleRepository.saveAll(AccountRole.ofList(findAccount, roles));
+    }
   }
 
   // FIXME: 더 좋은 방법...

@@ -4,8 +4,10 @@ import static java.util.stream.Collectors.toList;
 
 import io.devfactory.account.domain.Account;
 import io.devfactory.account.domain.AccountRole;
+import io.devfactory.account.repository.AccountRoleRepository;
 import io.devfactory.account.repository.UserRepository;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,16 +23,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomUserDetailsService implements UserDetailsService {
 
   private final UserRepository userRepository;
+  private final AccountRoleRepository accountRoleRepository;
 
   @Override
   public UserDetails loadUserByUsername(String email) {
     final Account findAccount = userRepository.findByEmail(email)
         .orElseThrow(() -> new UsernameNotFoundException("UsernameNotFoundException..."));
 
-    // TODO: account_id 로 role 목록 조회 쿼리 작성
-    final List<GrantedAuthority> authorities = findAccount.getRoles()
-        .stream()
-        .map(AccountRole::getRoleName)
+    final Set<AccountRole> findRoles = accountRoleRepository.findByAccount(findAccount);
+    findAccount.changeRoles(findRoles);
+
+    final List<GrantedAuthority> authorities = findRoles.stream()
+        .map(accountRole -> accountRole.getRole().getName())
         .map(SimpleGrantedAuthority::new)
         .collect(toList())
       ;

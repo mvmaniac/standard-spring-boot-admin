@@ -1,6 +1,5 @@
 package io.devfactory.account.domain;
 
-import static java.util.stream.Collectors.joining;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
@@ -54,18 +53,16 @@ public class Account extends BaseEntity {
   @Column(name = "account_age")
   private int age;
 
-  @OneToMany(mappedBy = "account", cascade = ALL)
+  @OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
   private Set<AccountRole> roles = new HashSet<>();
 
   @Builder(builderMethodName = "create")
-  private Account(Long id, String username, String password, String email, int age, Set<AccountRole> roles) {
+  private Account(Long id, String username, String password, String email, int age) {
     this.id = id;
     this.username = username;
     this.password = new Password(password);
     this.email = email;
     this.age = age;
-
-    changeRoles(roles);
   }
 
   public Account encodePassword(PasswordEncoder encoder) {
@@ -79,16 +76,6 @@ public class Account extends BaseEntity {
 
   public String getPasswordValue() {
     return password.getValue();
-  }
-
-  public Account addRole(AccountRole role) {
-    this.roles.add(role);
-    role.changeAccount(this);
-    return this;
-  }
-
-  public String getRoleNames() {
-    return getRoles().stream().map(AccountRole::getRoleName).collect(joining(","));
   }
 
   public void changeAccount(Account changeAccount) {

@@ -33,7 +33,8 @@
         </td>
         <td th:text="${user.email}" data-title="이메일"></td>
         <td th:text="${user.age}" data-title="나이"></td>
-        <td th:text="${user.roleName}" data-title="권한"></td>
+        <!--suppress ThymeleafVariablesResolveInspection -->
+        <td th:text="${#custom.combineRoleNames(user.roles)}" data-title="권한"></td>
         <td th:text="${#temporals.format(user.createdDate, 'yyyy-mm-dd HH:mm:ss')}" data-title="등록일"></td>
         <td th:text="${#temporals.format(user.updatedDate, 'yyyy-mm-dd HH:mm:ss')}" data-title="수정일"></td>
       </tr>

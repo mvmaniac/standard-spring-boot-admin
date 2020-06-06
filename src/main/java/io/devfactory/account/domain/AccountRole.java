@@ -42,21 +42,13 @@ public class AccountRole extends BaseEntity {
   @JoinColumn(name = "role_id")
   private Role role;
 
-  private AccountRole(Account account, Role role) {
+  public AccountRole(Account account, Role role) {
     this.account = account;
     this.role = role;
   }
 
-  public static AccountRole of(Account account, Role role) {
-    return new AccountRole(account , role);
-  }
-
   public static List<AccountRole> ofList(Account account, List<Role> roles) {
-    return roles.stream().map(role -> of(account, role)).collect(toList());
-  }
-
-  public String getRoleName() {
-    return this.role.getName();
+    return roles.stream().map(role -> new AccountRole(account, role)).collect(toList());
   }
 
   public void changeAccount(Account account) {

@@ -40,9 +40,6 @@ public class Role extends BaseEntity {
   @Column(name = "role_description", length = 30)
   private String description;
 
-  @OneToMany(mappedBy = "role", cascade = ALL)
-  private Set<AccountRole> accounts = new HashSet<>();
-
   @Builder(builderMethodName = "create")
   private Role(Long id, String name, String description) {
     this.id = id;
