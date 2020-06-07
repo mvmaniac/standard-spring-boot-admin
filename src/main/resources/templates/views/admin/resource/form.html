@@ -68,14 +68,14 @@
 </div>
 
 <script th:ref="tabJs" th:inline="javascript">
-  $(function () {
-    var $resourceId = $('#resourceId'),
-        $name = $('#name'),
-        $type = $('#type'),
-        $httpMethod = $('#httpMethod'),
-        $orderNo = $('#orderNo'),
-        $roles = $('#roles');
+  var $resourceId = $('#resourceId'),
+      $name = $('#name'),
+      $type = $('#type'),
+      $httpMethod = $('#httpMethod'),
+      $orderNo = $('#orderNo'),
+      $roles = $('#roles');
 
+  $(function () {
     $("#btnList").click(function () {
       location.href = '[(@{/admin/resources(t=3)})]';
     });
@@ -142,36 +142,36 @@
         console.error(textStatus, error);
       });
     });
-
-    function formValidation() {
-      if (!$name.val()) {
-        alertAndFocus($name, '리소스 명을 입력해주세요.');
-        return false;
-      }
-
-      if (!$type.val()) {
-        alertAndFocus($type, '리소스 타입을 입력해주세요.');
-        return false;
-      }
-
-      if (!$orderNo.val()) {
-        alertAndFocus($orderNo, '순서를 입력해주세요.');
-        return false;
-      }
-
-      return true;
-    }
-
-    function formToJson() {
-      return JSON.stringify({
-        name: $name.val(),
-        type: $type.val(),
-        password: $httpMethod.val(),
-        orderNo: $orderNo.val(),
-        roleId: $roles.find('option:selected').val()
-      });
-    }
   });
+
+  function formValidation() {
+    if (!$name.val()) {
+      alertAndFocus($name, '리소스 명을 입력해주세요.');
+      return false;
+    }
+
+    if (!$type.val()) {
+      alertAndFocus($type, '리소스 타입을 입력해주세요.');
+      return false;
+    }
+
+    if (!$orderNo.val()) {
+      alertAndFocus($orderNo, '순서를 입력해주세요.');
+      return false;
+    }
+
+    return true;
+  }
+
+  function formToJson() {
+    return JSON.stringify({
+      name: $name.val(),
+      type: $type.val(),
+      password: $httpMethod.val(),
+      orderNo: $orderNo.val(),
+      roleId: $roles.find('option:selected').val()
+    });
+  }
 </script>
 
 </html>

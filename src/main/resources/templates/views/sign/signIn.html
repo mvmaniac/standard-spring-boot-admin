@@ -62,10 +62,10 @@
 <!--// @formatter:on-->
 
 <script th:inline="javascript">
-  $(function () {
-    var $inputUsername = $('#inputUsername'),
-        $inputPassword = $('#inputPassword');
+  var $inputUsername = $('#inputUsername'),
+      $inputPassword = $('#inputPassword');
 
+  $(function () {
     $('button.btn-sign').click(function (evt) {
       evt.preventDefault();
 
@@ -95,28 +95,28 @@
       // evt.preventDefault();
       // location.href = "/oauth2/authorization/"+ socialType;
     });
-
-    function validationForm() {
-      if (!$inputUsername.val()) {
-        alertAndFocus($inputUsername, '이메일를 입력해주세요.');
-        return false;
-      }
-
-      if (!$inputPassword.val()) {
-        alertAndFocus($inputPassword, '비밀번호를 입력해주세요.');
-        return false;
-      }
-
-      return true;
-    }
-
-    function formToJson() {
-      return JSON.stringify({
-        username: $inputUsername.val(),
-        password: $inputPassword.val()
-      });
-    }
   });
+
+  function validationForm() {
+    if (!$inputUsername.val()) {
+      alertAndFocus($inputUsername, '이메일를 입력해주세요.');
+      return false;
+    }
+
+    if (!$inputPassword.val()) {
+      alertAndFocus($inputPassword, '비밀번호를 입력해주세요.');
+      return false;
+    }
+
+    return true;
+  }
+
+  function formToJson() {
+    return JSON.stringify({
+      username: $inputUsername.val(),
+      password: $inputPassword.val()
+    });
+  }
 </script>
 
 </body>

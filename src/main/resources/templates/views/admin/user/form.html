@@ -59,12 +59,12 @@
 </div>
 
 <script th:ref="tabJs" th:inline="javascript">
-  $(function () {
-    var $email = $('#email'),
-        $username = $('#username'),
-        $password = $('#password'),
-        $age = $('#age');
+  var $email = $('#email'),
+      $username = $('#username'),
+      $password = $('#password'),
+      $age = $('#age');
 
+  $(function () {
     $("#btnList").click(function () {
       location.href = '[(@{/admin/users(t=1)})]';
     });
@@ -89,33 +89,33 @@
         console.error(textStatus, error);
       });
     });
-
-    function formValidation() {
-      if (!$email.val()) {
-        alertAndFocus($email, '이메일를 입력해주세요.');
-        return false;
-      }
-
-      if (!$username.val()) {
-        alertAndFocus($username, '이름을 입력해주세요.');
-        return false;
-      }
-
-      return true;
-    }
-
-    function formToJson() {
-      return JSON.stringify({
-        email: $email.val(),
-        username: $username.val(),
-        password: $password.val(),
-        age: $age.val(),
-        roles: $('input[name=roles]:checked').map(function () {
-          return $(this).val();
-        }).get()
-      });
-    }
   });
+
+  function formValidation() {
+    if (!$email.val()) {
+      alertAndFocus($email, '이메일를 입력해주세요.');
+      return false;
+    }
+
+    if (!$username.val()) {
+      alertAndFocus($username, '이름을 입력해주세요.');
+      return false;
+    }
+
+    return true;
+  }
+
+  function formToJson() {
+    return JSON.stringify({
+      email: $email.val(),
+      username: $username.val(),
+      password: $password.val(),
+      age: $age.val(),
+      roles: $('input[name=roles]:checked').map(function () {
+        return $(this).val();
+      }).get()
+    });
+  }
 </script>
 
 </html>

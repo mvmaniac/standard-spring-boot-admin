@@ -1,12 +1,11 @@
 package io.devfactory.account.domain;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
 
 import io.devfactory.global.common.model.BaseEntity;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -58,7 +57,7 @@ public class Resource extends BaseEntity {
     this.httpMethod = httpMethod;
     this.type = type;
     this.orderNo = orderNo;
-    this.role = (nonNull(role) && isNull(role.getId())) ? null : role;
+    this.role = (isEmptyRole(role)) ? null : role;
   }
 
   public void changeResource(Resource resource) {
@@ -66,8 +65,11 @@ public class Resource extends BaseEntity {
     this.httpMethod = resource.getHttpMethod();
     this.type = resource.getType();
     this.orderNo = resource.getOrderNo();
-    this.role = (nonNull(resource.getRole()) && isNull(resource.getRole().getId())) ? null
-        : resource.getRole();
+    this.role = (isEmptyRole(resource.getRole())) ? null : resource.getRole();
+  }
+
+  private boolean isEmptyRole(Role role) {
+    return Objects.isNull(role) || Objects.isNull(role.getId());
   }
 
 }

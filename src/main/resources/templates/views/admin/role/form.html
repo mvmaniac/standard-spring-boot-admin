@@ -37,11 +37,11 @@
 </div>
 
 <script th:ref="tabJs" th:inline="javascript">
-  $(function () {
-    var roleId = $('#roleId').val(),
-        $name = $('#name'),
-        $description = $('#description');
+  var roleId = $('#roleId').val(),
+      $name = $('#name'),
+      $description = $('#description');
 
+  $(function () {
     $("#btnList").click(function () {
       location.href = '[(@{/admin/roles(t=2)})]';
     });
@@ -87,23 +87,23 @@
         console.error(textStatus, error);
       });
     });
-
-    function formValidation() {
-      if (!$name.val()) {
-        alertAndFocus($name, '권한명을 입력해주세요.');
-        return false;
-      }
-
-      return true;
-    }
-
-    function formToJson() {
-      return JSON.stringify({
-        name: $name.val(),
-        description: $description.val()
-      });
-    }
   });
+
+  function formValidation() {
+    if (!$name.val()) {
+      alertAndFocus($name, '권한명을 입력해주세요.');
+      return false;
+    }
+
+    return true;
+  }
+
+  function formToJson() {
+    return JSON.stringify({
+      name: $name.val(),
+      description: $description.val()
+    });
+  }
 </script>
 
 </html>

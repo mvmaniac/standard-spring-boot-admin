@@ -1,4 +1,4 @@
-package io.devfactory.global.dialect;
+package io.devfactory.global.common.dialect;
 
 import static java.util.stream.Collectors.joining;
 

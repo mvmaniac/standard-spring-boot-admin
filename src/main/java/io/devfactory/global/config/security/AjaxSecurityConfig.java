@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +17,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-// TODO: config 를 하나로 통일? ajax 일 때도 csrf를 사용하도록?
+// TODO: config 를 하나로 통일
 @RequiredArgsConstructor
 @Order(0)
 @Configuration
@@ -47,12 +46,6 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     ajaxLoginProcessingFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler);
 
     return ajaxLoginProcessingFilter;
-  }
-
-  @Bean
-  @Override
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
   }
 
   @Override
@@ -88,7 +81,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Custom Filter 가 아닌 Custom DSL로 설정 추가
     http
-      .apply(new AjaxSecurityConfigurer<>())
+      .apply(new AjaxLoginConfigurer<>())
         .setAuthenticationManager(authenticationManagerBean())
         .successHandlerAjax(ajaxAuthenticationSuccessHandler)
         .failureHandlerAjax(ajaxAuthenticationFailureHandler)

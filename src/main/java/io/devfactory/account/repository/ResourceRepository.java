@@ -1,20 +1,21 @@
 package io.devfactory.account.repository;
 
 import io.devfactory.account.domain.Resource;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
-  @EntityGraph(attributePaths = {"role"})
-  @Override
-  List<Resource> findAll(Sort sort);
+  @Query("select re from Resource re join fetch re.role ro order by re.id asc")
+  List<Resource> findResources();
+
+  @Query("select re from Resource re join fetch re.role ro where re.type = :type order by re.orderNo desc")
+  List<Resource> findResourcesByType(String type);
 
   @EntityGraph(attributePaths = {"role"})
-  @Override
-  Optional<Resource> findById(Long aLong);
+  Optional<Resource> findResourceById(Long resourceId);
 
 }

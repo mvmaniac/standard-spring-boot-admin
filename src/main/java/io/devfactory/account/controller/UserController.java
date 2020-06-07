@@ -13,14 +13,19 @@ public class UserController {
 
   private final UserService userService;
 
-  @GetMapping("/mypage")
-  public String myPage() {
-    return "views/user/mypage";
+  @GetMapping("/my")
+  public String viewMy() {
+    return "views/user/my";
   }
 
   @GetMapping("/message")
-  public String message() {
+  public String viewMessage() {
     return "views/user/message";
+  }
+
+  @GetMapping("/public")
+  public String viewPublic() {
+    return "views/user/public";
   }
 
 }

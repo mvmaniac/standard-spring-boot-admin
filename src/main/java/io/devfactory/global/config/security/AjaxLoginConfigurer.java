@@ -13,14 +13,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.util.Objects;
 
-public class AjaxSecurityConfigurer<H extends HttpSecurityBuilder<H>> extends
-    AbstractAuthenticationFilterConfigurer<H, AjaxSecurityConfigurer<H>, AjaxLoginProcessingFilter> {
+public class AjaxLoginConfigurer<H extends HttpSecurityBuilder<H>> extends
+    AbstractAuthenticationFilterConfigurer<H, AjaxLoginConfigurer<H>, AjaxLoginProcessingFilter> {
 
   private AuthenticationSuccessHandler successHandler;
   private AuthenticationFailureHandler failureHandler;
   private AuthenticationManager authenticationManager;
 
-  public AjaxSecurityConfigurer() {
+  public AjaxLoginConfigurer() {
     super(new AjaxLoginProcessingFilter(), null);
   }
 
@@ -35,45 +35,47 @@ public class AjaxSecurityConfigurer<H extends HttpSecurityBuilder<H>> extends
       authenticationManager = http.getSharedObject(AuthenticationManager.class);
     }
 
-    getAuthenticationFilter().setAuthenticationManager(authenticationManager);
-    getAuthenticationFilter().setAuthenticationSuccessHandler(successHandler);
-    getAuthenticationFilter().setAuthenticationFailureHandler(failureHandler);
+    final AjaxLoginProcessingFilter ajaxLoginProcessingFilter = getAuthenticationFilter();
+
+    ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManager);
+    ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(successHandler);
+    ajaxLoginProcessingFilter.setAuthenticationFailureHandler(failureHandler);
 
     SessionAuthenticationStrategy sessionAuthenticationStrategy = http
         .getSharedObject(SessionAuthenticationStrategy.class);
 
     if (Objects.nonNull(sessionAuthenticationStrategy)) {
-      getAuthenticationFilter().setSessionAuthenticationStrategy(sessionAuthenticationStrategy);
+      ajaxLoginProcessingFilter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy);
     }
 
     RememberMeServices rememberMeServices = http
         .getSharedObject(RememberMeServices.class);
 
     if (Objects.nonNull(rememberMeServices)) {
-      getAuthenticationFilter().setRememberMeServices(rememberMeServices);
+      ajaxLoginProcessingFilter.setRememberMeServices(rememberMeServices);
     }
 
-    http.setSharedObject(AjaxLoginProcessingFilter.class, getAuthenticationFilter());
-    http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.setSharedObject(AjaxLoginProcessingFilter.class, ajaxLoginProcessingFilter);
+    http.addFilterBefore(ajaxLoginProcessingFilter, UsernamePasswordAuthenticationFilter.class);
   }
 
   @Override
-  public AjaxSecurityConfigurer<H> loginPage(String loginPage) {
+  public AjaxLoginConfigurer<H> loginPage(String loginPage) {
     return super.loginPage(loginPage);
   }
 
-  public AjaxSecurityConfigurer<H> successHandlerAjax(AuthenticationSuccessHandler successHandler) {
+  public AjaxLoginConfigurer<H> successHandlerAjax(AuthenticationSuccessHandler successHandler) {
     this.successHandler = successHandler;
     return this;
   }
 
-  public AjaxSecurityConfigurer<H> failureHandlerAjax(
+  public AjaxLoginConfigurer<H> failureHandlerAjax(
       AuthenticationFailureHandler authenticationFailureHandler) {
     this.failureHandler = authenticationFailureHandler;
     return this;
   }
 
-  public AjaxSecurityConfigurer<H> setAuthenticationManager(
+  public AjaxLoginConfigurer<H> setAuthenticationManager(
       AuthenticationManager authenticationManager) {
     this.authenticationManager = authenticationManager;
     return this;

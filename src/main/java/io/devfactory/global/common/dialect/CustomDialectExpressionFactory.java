@@ -1,4 +1,4 @@
-package io.devfactory.global.dialect;
+package io.devfactory.global.common.dialect;
 
 import java.util.Set;
 import org.thymeleaf.context.IExpressionContext;

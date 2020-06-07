@@ -55,12 +55,12 @@
 <!--// @formatter:on-->
 
 <script th:inline="javascript">
-  $(function () {
-    var $formSignUp = $('#formSignUp'),
-        $inputUsername = $('#inputUsername'),
-        $inputEmail = $('#inputEmail'),
-        $inputPassword = $('#inputPassword');
+  var $formSignUp = $('#formSignUp'),
+      $inputUsername = $('#inputUsername'),
+      $inputEmail = $('#inputEmail'),
+      $inputPassword = $('#inputPassword');
 
+  $(function () {
     $('#btnSignUp').click(function (evt) {
       evt.preventDefault();
 
@@ -70,26 +70,26 @@
 
       $formSignUp.submit();
     });
-
-    function validationForm() {
-      if (!$inputUsername.val()) {
-        alertAndFocus($inputUsername, '이름을 입력해주세요.');
-        return false;
-      }
-
-      if (!$inputEmail.val()) {
-        alertAndFocus($inputEmail, '이메일을 입력해주세요.');
-        return false;
-      }
-
-      if (!$inputPassword.val()) {
-        alertAndFocus($inputPassword, '비밀번호를 입력해주세요.');
-        return false;
-      }
-
-      return true;
-    }
   });
+
+  function validationForm() {
+    if (!$inputUsername.val()) {
+      alertAndFocus($inputUsername, '이름을 입력해주세요.');
+      return false;
+    }
+
+    if (!$inputEmail.val()) {
+      alertAndFocus($inputEmail, '이메일을 입력해주세요.');
+      return false;
+    }
+
+    if (!$inputPassword.val()) {
+      alertAndFocus($inputPassword, '비밀번호를 입력해주세요.');
+      return false;
+    }
+
+    return true;
+  }
 </script>
 
 </body>

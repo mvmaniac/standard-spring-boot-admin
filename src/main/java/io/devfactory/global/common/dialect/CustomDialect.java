@@ -1,4 +1,4 @@
-package io.devfactory.global.dialect;
+package io.devfactory.global.common.dialect;
 
 import org.springframework.stereotype.Component;
 import org.thymeleaf.dialect.AbstractDialect;
