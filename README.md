@@ -15,4 +15,3 @@
 * ddl-auto 를 create 해서 할 경우 SecurityMetadataSource 에서 데이터 싱크가 안맞는 문제 확인
 * /api 이하 url로 DB 연동하여 인가처리
 * ajax 를 통한 로그인 성공시 이전 URL 이동 처리
-* 사용자 정의 필터를 사용지 web.ignoring 이 제대로 동작하지 않은 문제 (AbstractSecurityInterceptor의 beforeInvocation 메소드에 걸림)

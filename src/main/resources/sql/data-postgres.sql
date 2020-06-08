@@ -5,6 +5,13 @@ VALUES
 (nextval('seq_tb_role'), 'ROLE_USER', '사용자 권한', 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
 ;
 
+INSERT INTO tb_role_hierarchy (role_hierarchy_id, child_id, parent_id, created_by, updated_by, created_date, updated_date)
+VALUES
+(nextval('seq_tb_role_hierarchy'), 1, null, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_role_hierarchy'), 2, 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_role_hierarchy'), 3, 2, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+;
+
 INSERT INTO tb_account (account_id, account_username, account_password, account_email, account_age, created_by, updated_by, created_date, updated_date)
 VALUES
 (nextval('seq_tb_account'), 'admin', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'admin@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),

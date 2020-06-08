@@ -3,14 +3,18 @@ package io.devfactory.global.config.security;
 import io.devfactory.global.config.security.common.FormAuthenticationDetailsSource;
 import io.devfactory.global.config.security.filter.PermitAllFilter;
 import io.devfactory.global.config.security.provider.CustomAuthenticationProvider;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
-import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -58,9 +62,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return permitAllFilter;
   }
 
+  // customFilterSecurityInterceptor 를 filterRegistrationBean 으로 등록해서 
+  // enabled 를 false 로 해서 securityFilterChain 에서만 등록해서 사용되도록 함
+  // 만약 이걸 하지 않으면 web.ignoring 으로 등록된 리소스들이 무시되어 customFilterSecurityInterceptor를 탐
+  @Bean
+  public FilterRegistrationBean<FilterSecurityInterceptor> filterRegistrationBean()
+      throws Exception {
+    final FilterRegistrationBean<FilterSecurityInterceptor> filterRegistrationBean = new FilterRegistrationBean<>();
+    filterRegistrationBean.setFilter(customFilterSecurityInterceptor());
+    filterRegistrationBean.setEnabled(false);
+    return filterRegistrationBean;
+  }
+
   @Bean
   public AffirmativeBased affirmativeBased() {
-    return new AffirmativeBased(List.of(new RoleVoter()));
+    List<AccessDecisionVoter<? extends Object>> voters = new ArrayList<>();
+    voters.add(new RoleHierarchyVoter(roleHierarchy()));
+
+    return new AffirmativeBased(voters);
+  }
+
+  @Bean
+  public RoleHierarchyImpl roleHierarchy() {
+    return new RoleHierarchyImpl();
   }
 
   @Override

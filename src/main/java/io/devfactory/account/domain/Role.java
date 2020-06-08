@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.Objects;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
@@ -46,6 +47,25 @@ public class Role extends BaseEntity {
   public void changeRole(Role role) {
     this.name = role.getName();
     this.description = role.getDescription();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Role role = (Role) o;
+    return Objects.equals(id, role.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 
 }
