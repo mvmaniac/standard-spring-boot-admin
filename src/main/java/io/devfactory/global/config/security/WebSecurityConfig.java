@@ -3,6 +3,8 @@ package io.devfactory.global.config.security;
 import io.devfactory.global.config.security.common.FormAuthenticationDetailsSource;
 import io.devfactory.global.config.security.filter.PermitAllFilter;
 import io.devfactory.global.config.security.provider.CustomAuthenticationProvider;
+import io.devfactory.global.config.security.service.ResourceMappingConfigService;
+import io.devfactory.global.config.security.voter.IpAddressVoter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserDetailsService userDetailsService;
+  private final ResourceMappingConfigService resourceMappingConfigService;
 
   private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
   private final AuthenticationFailureHandler customAuthenticationFailureHandler;
@@ -77,6 +80,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public AffirmativeBased affirmativeBased() {
     List<AccessDecisionVoter<? extends Object>> voters = new ArrayList<>();
+
+    voters.add(new IpAddressVoter(resourceMappingConfigService));
     voters.add(new RoleHierarchyVoter(roleHierarchy()));
 
     return new AffirmativeBased(voters);

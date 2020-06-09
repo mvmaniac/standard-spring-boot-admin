@@ -1,7 +1,9 @@
 package io.devfactory.global.config.security.service;
 
+import io.devfactory.account.domain.AccessIp;
 import io.devfactory.account.domain.Resource;
 import io.devfactory.account.domain.Role;
+import io.devfactory.account.repository.AccessIpRepository;
 import io.devfactory.account.repository.ResourceRepository;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,14 +17,17 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static java.util.stream.Collectors.toList;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class UrlMappingConfigService {
+public class ResourceMappingConfigService {
 
   private final ResourceRepository resourceRepository;
+  private final AccessIpRepository accessIpRepository;
 
-  public Map<RequestMatcher, List<ConfigAttribute>> getResources() {
+  public Map<RequestMatcher, List<ConfigAttribute>> getResourcesByUrl() {
     Map<RequestMatcher, List<ConfigAttribute>> resourcesMap = new LinkedHashMap<>();
 
     final List<Resource> resources = resourceRepository.findResourcesByType("url");
@@ -34,6 +39,13 @@ public class UrlMappingConfigService {
     });
 
     return resourcesMap;
+  }
+
+  public List<String> getAccessIpAddress() {
+    return accessIpRepository.findAll().stream()
+        .map(AccessIp::getIpAddress)
+        .collect(toList())
+      ;
   }
 
   private RequestMatcher requestMatcherOf(Resource resource) {

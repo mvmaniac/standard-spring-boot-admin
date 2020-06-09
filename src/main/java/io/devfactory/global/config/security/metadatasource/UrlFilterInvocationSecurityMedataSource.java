@@ -1,6 +1,6 @@
 package io.devfactory.global.config.security.metadatasource;
 
-import io.devfactory.global.config.security.service.UrlMappingConfigService;
+import io.devfactory.global.config.security.service.ResourceMappingConfigService;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,7 +27,7 @@ public class UrlFilterInvocationSecurityMedataSource implements
     FilterInvocationSecurityMetadataSource, InitializingBean {
 
   private final FactoryBean<Map<RequestMatcher, List<ConfigAttribute>>> urlResourcesMapFactoryBean;
-  private final UrlMappingConfigService urlMappingConfigService;
+  private final ResourceMappingConfigService resourceMappingConfigService;
 
   private Map<RequestMatcher, List<ConfigAttribute>> requestMap;
 
@@ -72,7 +72,7 @@ public class UrlFilterInvocationSecurityMedataSource implements
     log.debug("[dev] UrlFilterInvocationSecurityMedataSource reload...");
 
     final Map<RequestMatcher, List<ConfigAttribute>> resources =
-        urlMappingConfigService.getResources();
+        resourceMappingConfigService.getResourcesByUrl();
 
     requestMap.clear();
 

@@ -1,6 +1,6 @@
 package io.devfactory.global.config.security.factory;
 
-import io.devfactory.global.config.security.service.UrlMappingConfigService;
+import io.devfactory.global.config.security.service.ResourceMappingConfigService;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class UrlResourcesMapFactoryBean implements
     FactoryBean<Map<RequestMatcher, List<ConfigAttribute>>>, InitializingBean {
 
-  private final UrlMappingConfigService urlMappingConfigService;
+  private final ResourceMappingConfigService resourceMappingConfigService;
 
   private Map<RequestMatcher, List<ConfigAttribute>> resourcesMap;
 
@@ -36,7 +36,7 @@ public class UrlResourcesMapFactoryBean implements
 
   @Override
   public void afterPropertiesSet() {
-    resourcesMap = urlMappingConfigService.getResources();
+    resourcesMap = resourceMappingConfigService.getResourcesByUrl();
   }
 
 }
