@@ -33,7 +33,7 @@
         <a href="javascript:void(0)" data-toggle="dropdown" class="nav-link dropdown-toggle">보안 테스트</a>
         <div class="dropdown-menu">
           <a th:href="@{/}" class="dropdown-item">애너테이션 보안</a>
-          <a th:href="@{/}" class="dropdown-item">메소드 보안</a>
+          <a th:href="@{/preAuthorize(username='dev1')}" class="dropdown-item">메소드 보안</a>
           <a th:href="@{/}" class="dropdown-item">포인트컷 보안</a>
           <a th:href="@{/}" class="dropdown-item">실시간 메소드 보안</a>
         </div>
