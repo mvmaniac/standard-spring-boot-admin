@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class IpAddressVoter implements AccessDecisionVoter<Object> {
@@ -30,14 +31,18 @@ public class IpAddressVoter implements AccessDecisionVoter<Object> {
       Collection<ConfigAttribute> attributes) {
 
     final WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
-    final String remoteAddress = details.getRemoteAddress();
 
-    final List<String> accessIpAddress = resourceMappingConfigService.getAccessIpAddress();
-    final boolean isNoneMatch = accessIpAddress.stream()
-        .noneMatch(ipAddress -> ipAddress.equals(remoteAddress));
+    // TODO: 로그인 한 사용자의 경우 커스텀이라서 값이 없음, 해당 로직을 타도록 수정 필요
+    if (Objects.nonNull(details)) {
+      final String remoteAddress = details.getRemoteAddress();
 
-    if (isNoneMatch) {
-      throw new AccessDeniedException("Invalid IpAddress...");
+      final List<String> accessIpAddress = resourceMappingConfigService.getAccessIpAddress();
+      final boolean isNoneMatch = accessIpAddress.stream()
+          .noneMatch(ipAddress -> ipAddress.equals(remoteAddress));
+
+      if (isNoneMatch) {
+        throw new AccessDeniedException("Invalid IpAddress...");
+      }
     }
 
     return ACCESS_ABSTAIN;

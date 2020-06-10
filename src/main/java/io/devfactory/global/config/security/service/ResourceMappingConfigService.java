@@ -41,6 +41,19 @@ public class ResourceMappingConfigService {
     return resourcesMap;
   }
 
+  public Map<String, List<ConfigAttribute>> getResourcesByMethod() {
+    Map<String, List<ConfigAttribute>> resourcesMap = new LinkedHashMap<>();
+
+    final List<Resource> resources = resourceRepository.findResourcesByType("method");
+
+    resources.forEach(resource -> {
+      List<ConfigAttribute> configAttributes = configAttributeListOf(resource);
+      resourcesMap.put(resource.getName(), configAttributes);
+    });
+
+    return resourcesMap;
+  }
+
   public List<String> getAccessIpAddress() {
     return accessIpRepository.findAll().stream()
         .map(AccessIp::getIpAddress)

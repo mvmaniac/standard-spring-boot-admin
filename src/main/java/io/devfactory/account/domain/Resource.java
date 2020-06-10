@@ -34,7 +34,7 @@ public class Resource extends BaseEntity {
   @Column(name = "resource_id")
   private Long id;
 
-  @Column(name = "resource_name", length = 20, nullable = false)
+  @Column(name = "resource_name", length = 100, nullable = false)
   private String name;
 
   @Column(length = 10)

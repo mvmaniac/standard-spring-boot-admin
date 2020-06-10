@@ -8,7 +8,7 @@ spring:
     username: dev
     password: dev
 
-    initialization-mode: always
+    initialization-mode: never
     platform: postgres
     data: classpath:sql/data-postgres.sql
 
@@ -16,7 +16,7 @@ spring:
     open-in-view: false
     show-sql: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
