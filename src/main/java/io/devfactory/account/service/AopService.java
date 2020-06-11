@@ -11,4 +11,12 @@ public class AopService {
     log.debug("[dev] methodSecured...");
   }
 
+  public void pointcutSecured() {
+    log.debug("[dev] pointcutSecured...");
+  }
+
+  public void notSecured() {
+    log.debug("[dev] notSecured...");
+  }
+
 }

@@ -31,7 +31,8 @@ VALUES
 (nextval('seq_tb_resource'), '/admin/**', '', 'url', 1, 1, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
 (nextval('seq_tb_resource'), '/user/my', '', 'url', 2, 3, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
 (nextval('seq_tb_resource'), '/user/message', '', 'url', 3, 2, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
-(nextval('seq_tb_resource'), 'io.devfactory.account.service.AopService.methodSecured', '', 'method', 1, 3, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+(nextval('seq_tb_resource'), 'io.devfactory.account.service.AopService.methodSecured', '', 'method', 1, 3, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_resource'), 'execution(* io.devfactory.account.service.AopService.pointcut*(..))', '', 'pointcut', 1, 3, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
 ;
 
 INSERT INTO tb_access_ip (access_ip_id, ip_address, created_by, updated_by, created_date, updated_date)

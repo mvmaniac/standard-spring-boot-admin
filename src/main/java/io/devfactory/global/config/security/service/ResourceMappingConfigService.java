@@ -41,10 +41,10 @@ public class ResourceMappingConfigService {
     return resourcesMap;
   }
 
-  public Map<String, List<ConfigAttribute>> getResourcesByMethod() {
+  public Map<String, List<ConfigAttribute>> getResourcesByMethod(String resourceType) {
     Map<String, List<ConfigAttribute>> resourcesMap = new LinkedHashMap<>();
 
-    final List<Resource> resources = resourceRepository.findResourcesByType("method");
+    final List<Resource> resources = resourceRepository.findResourcesByType(resourceType);
 
     resources.forEach(resource -> {
       List<ConfigAttribute> configAttributes = configAttributeListOf(resource);

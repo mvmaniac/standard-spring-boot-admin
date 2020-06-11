@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, _, ~{::style})}">
+<head>
+  <title>AOP Pointcut - DevFactory</title>
+  <style>
+    section.section-main {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      height: 50vh;
+    }
+  </style>
+</head>
+<body>
+
+<section th:ref="main" class="section-main">
+  <h1 th:text="${pointcut}"></h1>
+</section>
+
+</body>
+</html>

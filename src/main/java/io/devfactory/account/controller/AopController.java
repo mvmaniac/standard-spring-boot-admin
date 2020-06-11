@@ -29,4 +29,12 @@ public class AopController {
     return "views/aop/method";
   }
 
+  @GetMapping("/pointcut")
+  public String pointcut(Model model) {
+    aopService.notSecured();
+    aopService.pointcutSecured();
+    model.addAttribute("pointcut", "Success PointcutSecured");
+    return "views/aop/pointcut";
+  }
+
 }
