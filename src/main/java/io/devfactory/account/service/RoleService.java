@@ -19,7 +19,7 @@ public class RoleService {
     return roleRepository.findById(roleId).orElseThrow(EntityNotFoundException::new);
   }
 
-  public List<Role> findRoles() {
+  public List<Role> findRoleAll() {
     return roleRepository.findAll();
   }
 
@@ -30,9 +30,9 @@ public class RoleService {
   }
 
   @Transactional
-  public void modifyRole(Role role) {
+  public void updateRole(Role role) {
     final Role findRole = findRoleById(role.getId());
-    findRole.changeRole(role);
+    findRole.update(role);
   }
 
   @Transactional

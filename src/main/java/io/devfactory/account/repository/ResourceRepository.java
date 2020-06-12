@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
   @Query("select re from Resource re join fetch re.role ro order by re.id asc")
-  List<Resource> findResources();
+  List<Resource> findResourceAll();
 
   @Query("select re from Resource re join fetch re.role ro where re.type = :type order by re.orderNo desc")
   List<Resource> findResourcesByType(String type);

@@ -34,7 +34,7 @@ public class UserService {
     return changeRoles(findAccount);
   }
 
-  public List<Account> findUsers() {
+  public List<Account> findUserAll() {
     final List<Account> findAccounts = userRepository.findAll(Sort.by(ASC, "id"));
     return findAccounts.stream().map(this::changeRoles).collect(toList());
   }
@@ -43,7 +43,7 @@ public class UserService {
   public void saveUser(Account account) {
     // TODO: 기본 롤 여부를 두어서 가져오기?
     // 기본 롤을 만들어서 저장, 현재 아이디 3인 것이 기본 롤...
-    final AccountRole userRole = new AccountRole(account, Role.create().id(3L).build());
+    final AccountRole userRole = AccountRole.of(account, Role.create().id(3L).build());
 
     // AccountRole 를 만들때 account 넘기기 때문에 연관관계 편의 메소드를 사용하지 않음
     account.encodePassword(passwordEncoder);
@@ -53,11 +53,11 @@ public class UserService {
   }
 
   @Transactional
-  public void modifyUser(Account account, List<Role> roles) {
+  public void updateUser(Account account, List<Role> roles) {
     final Account findAccount = userRepository.findById(account.getId())
         .orElseThrow(EntityNotFoundException::new);
 
-    findAccount.changeAccount(account);
+    findAccount.updateAccount(account);
     findAccount.getRoles().clear(); // 이렇게 삭제 하는 경우 삭제할 건수 만큼 쿼리가 날라감
 
     // TODO: 현재는 그냥 다 지우고 다시 등록하는 방법인데 더 좋은 방법?

@@ -16,7 +16,7 @@ public class SecurityRunner implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) {
-    final String roleHierarchies = roleHierarchyService.findRoleHierarchiesToString();
+    final String roleHierarchies = roleHierarchyService.findRoleHierarchyAllToString();
     roleHierarchy.setHierarchy(roleHierarchies);
   }
 

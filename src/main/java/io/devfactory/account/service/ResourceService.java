@@ -24,8 +24,8 @@ public class ResourceService {
         .orElseThrow(EntityNotFoundException::new);
   }
 
-  public List<Resource> findResources() {
-    return resourceRepository.findResources();
+  public List<Resource> findResourceAll() {
+    return resourceRepository.findResourceAll();
   }
 
   @Transactional
@@ -37,9 +37,9 @@ public class ResourceService {
   }
 
   @Transactional
-  public void modifyResource(Resource resource) {
+  public void updateResource(Resource resource) {
     final Resource findResource = findResourceById(resource.getId());
-    findResource.changeResource(resource);
+    findResource.update(resource);
 
     urlFilterInvocationSecurityMedataSource.reload();
   }

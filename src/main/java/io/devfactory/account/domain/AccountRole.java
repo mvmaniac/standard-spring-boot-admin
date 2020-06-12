@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,9 +43,14 @@ public class AccountRole extends BaseEntity {
   @JoinColumn(name = "role_id")
   private Role role;
 
-  public AccountRole(Account account, Role role) {
+  @Builder(builderMethodName = "create")
+  private AccountRole(Account account, Role role) {
     this.account = account;
     this.role = role;
+  }
+
+  public static AccountRole of(Account account, Role role) {
+    return new AccountRole(account, role);
   }
 
   public static List<AccountRole> ofList(Account account, List<Role> roles) {

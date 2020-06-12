@@ -1,6 +1,7 @@
 package io.devfactory.account.domain;
 
 import io.devfactory.global.common.model.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.Column;
@@ -32,9 +33,14 @@ public class AccessIp extends BaseEntity {
   @Column(nullable = false)
   private String ipAddress;
 
-  public AccessIp(Long id, String ipAddress) {
+  @Builder(builderMethodName = "create")
+  private AccessIp(Long id, String ipAddress) {
     this.id = id;
     this.ipAddress = ipAddress;
+  }
+
+  public static AccessIp of(Long id, String ipAddress) {
+    return new AccessIp(id, ipAddress);
   }
 
 }

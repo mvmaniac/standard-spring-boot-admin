@@ -21,8 +21,8 @@ public class RoleManageController {
   private final RoleService roleService;
 
   @GetMapping()
-  public String viewRoles(Model model) {
-    final List<Role> roles = roleService.findRoles();
+  public String viewRoleList(Model model) {
+    final List<Role> roles = roleService.findRoleAll();
     final List<RoleResponseView> views = RoleMapper.INSTANCE.toRoleResponseViewList(roles);
 
     model.addAttribute("result", RolesResponseView.of(views));
@@ -30,12 +30,12 @@ public class RoleManageController {
   }
 
   @GetMapping("/form")
-  public String viewRoleForm() {
+  public String viewRoleCreateForm() {
     return "views/admin/role/form";
   }
 
   @GetMapping("/form/{id}")
-  public String viewRoleForm(@PathVariable("id") Long roleId, Model model) {
+  public String viewRoleModifyForm(@PathVariable("id") Long roleId, Model model) {
     final Role role = roleService.findRoleById(roleId);
     final RoleResponseView roleResponseView = RoleMapper.INSTANCE.toRoleResponseView(role);
 

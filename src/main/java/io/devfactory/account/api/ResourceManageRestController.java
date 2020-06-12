@@ -24,7 +24,7 @@ public class ResourceManageRestController {
   private final ResourceService resourceService;
 
   @PostMapping
-  public ResponseEntity<ResourceResponseView> saveResource(@RequestBody ResourceRequestView view) {
+  public ResponseEntity<ResourceResponseView> createResource(@RequestBody ResourceRequestView view) {
     final Resource resource = ResourceMapper.INSTANCE.toResource(view);
     final Resource savedResource = resourceService.saveResource(resource);
     return ResponseEntity.ok(ResourceMapper.INSTANCE.toResourceResponseView(savedResource));
@@ -34,12 +34,12 @@ public class ResourceManageRestController {
   public ResponseEntity<Boolean> modifyResource(@PathVariable("id") Long resourceId,
       @RequestBody ResourceRequestView view) {
     final Resource resource = ResourceMapper.INSTANCE.toResource(resourceId, view);
-    resourceService.modifyResource(resource);
+    resourceService.updateResource(resource);
     return ResponseEntity.ok(true);
   }
 
   @DeleteMapping
-  public ResponseEntity<Boolean> saveResource(@RequestParam("id") Long resourceId) {
+  public ResponseEntity<Boolean> removeResource(@RequestParam("id") Long resourceId) {
     resourceService.deleteResourceById(resourceId);
     return ResponseEntity.ok(true);
   }

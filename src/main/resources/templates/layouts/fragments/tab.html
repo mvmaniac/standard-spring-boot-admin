@@ -54,7 +54,7 @@
     </li>
     <li class="nav-item" data-no="4">
       <a th:classappend="${#strings.equals(param.t, '4')} ? 'active'" class="nav-link"
-         id="manageAuthorityHierarchyTab" data-toggle="tab"
+         id="manageRoleHierarchyTab" data-toggle="tab"
          href="javascript:void(0)">권한 계층 관리</a>
     </li>
     <li class="nav-item" data-no="5">
@@ -85,7 +85,7 @@
           url = '[(@{/admin/resources})]';
           break;
         case 4:
-          url = '[(@{/admin/users})]';
+          url = '[(@{/admin/hierarchy})]';
           break;
         case 5:
           url = '[(@{/admin/ip})]';

@@ -26,8 +26,8 @@ public class UserManageController {
   private final RoleService roleService;
 
   @GetMapping
-  public String viewUsers(Model model) {
-    final List<Account> accounts = userService.findUsers();
+  public String viewUserList(Model model) {
+    final List<Account> accounts = userService.findUserAll();
     final List<UserResponseView> userResponseView = AccountMapper.INSTANCE
         .toUserResponseViewList(accounts);
 
@@ -40,7 +40,7 @@ public class UserManageController {
     final Account account = userService.findUserById(userId);
     final UserResponseView userResponseView = AccountMapper.INSTANCE.toUserResponseView(account);
 
-    final List<Role> roles = roleService.findRoles();
+    final List<Role> roles = roleService.findRoleAll();
     final List<RoleResponseView> rolesResponseView = RoleMapper.INSTANCE
         .toRoleResponseViewList(roles);
 

@@ -60,7 +60,12 @@ public class Resource extends BaseEntity {
     this.role = (isEmptyRole(role)) ? null : role;
   }
 
-  public void changeResource(Resource resource) {
+  public static Resource of(Long id, String name, String httpMethod,
+      String type, int orderNo, Role role) {
+    return new Resource(id, name, httpMethod, type, orderNo, role);
+  }
+
+  public void update(Resource resource) {
     this.name = resource.getName();
     this.httpMethod = resource.getHttpMethod();
     this.type = resource.getType();

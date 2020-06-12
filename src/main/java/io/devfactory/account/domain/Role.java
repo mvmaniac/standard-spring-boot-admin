@@ -4,6 +4,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
 
 import io.devfactory.global.common.model.BaseEntity;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,6 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.Objects;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
@@ -44,7 +44,11 @@ public class Role extends BaseEntity {
     this.description = description;
   }
 
-  public void changeRole(Role role) {
+  public static Role of(Long id, String name, String description) {
+    return new Role(id, name, description);
+  }
+
+  public void update(Role role) {
     this.name = role.getName();
     this.description = role.getDescription();
   }

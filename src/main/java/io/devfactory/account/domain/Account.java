@@ -65,6 +65,10 @@ public class Account extends BaseEntity {
     this.age = age;
   }
 
+  public static Account of(Long id, String username, String password, String email, int age) {
+    return new Account(id, username, password, email, age);
+  }
+
   public Account encodePassword(PasswordEncoder encoder) {
     this.password.encode(encoder);
     return this;
@@ -78,7 +82,7 @@ public class Account extends BaseEntity {
     return password.getValue();
   }
 
-  public void changeAccount(Account changeAccount) {
+  public void updateAccount(Account changeAccount) {
     this.username = changeAccount.getUsername();
     this.email = changeAccount.getEmail();
     this.age = changeAccount.getAge();

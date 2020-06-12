@@ -19,7 +19,7 @@ public class RoleHierarchyService {
 
   private final RoleHierarchyRepository roleHierarchyRepository;
 
-  public String findRoleHierarchiesToString() {
+  public String findRoleHierarchyAllToString() {
     final List<RoleHierarchy> roleHierarchies = roleHierarchyRepository.findRoleHierarchies();
 
     final RoleHierarchy root = roleHierarchies.get(0);

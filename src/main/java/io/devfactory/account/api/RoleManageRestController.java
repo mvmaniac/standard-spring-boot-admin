@@ -22,7 +22,7 @@ public class RoleManageRestController {
   private final RoleService roleService;
 
   @PostMapping
-  public ResponseEntity<RoleResponseView> saveRole(@RequestBody RoleRequestView view) {
+  public ResponseEntity<RoleResponseView> createRole(@RequestBody RoleRequestView view) {
     final Role role = RoleMapper.INSTANCE.toRole(view);
     final Role savedRole = roleService.saveRole(role);
     return ResponseEntity.ok(RoleMapper.INSTANCE.toRoleResponseView(savedRole));
@@ -32,7 +32,7 @@ public class RoleManageRestController {
   public ResponseEntity<Boolean> modifyRole(@PathVariable("id") Long roleId,
       @RequestBody RoleRequestView view) {
     final Role role = RoleMapper.INSTANCE.toRole(roleId, view);
-    roleService.modifyRole(role);
+    roleService.updateRole(role);
 
     return ResponseEntity.ok(true);
   }

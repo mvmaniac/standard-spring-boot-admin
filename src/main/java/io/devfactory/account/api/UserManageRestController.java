@@ -28,7 +28,7 @@ public class UserManageRestController {
     final Account account = AccountMapper.INSTANCE.toAccount(userId, view);
     final List<Role> roles = RoleMapper.INSTANCE.toRoles(view.getRoles());
 
-    userService.modifyUser(account, roles);
+    userService.updateUser(account, roles);
     return ResponseEntity.ok(true);
   }
 
