@@ -30,7 +30,7 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
       errorMessage = exception.getMessage();
     }
 
-    response.setStatus(HttpStatus.OK.value());
+    response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
     objectMapper.writeValue(response.getWriter(), errorMessage);
