@@ -1,57 +1,56 @@
 plugins {
-    id 'org.springframework.boot' version '2.4.1'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-    id 'java'
+  id 'org.springframework.boot' version '2.5.0'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'java'
 }
 
 group = 'io.devfactory'
 version = '0.0.1'
-sourceCompatibility = JavaVersion.VERSION_14
-targetCompatibility = JavaVersion.VERSION_14
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
 }
 
 repositories {
-    mavenCentral()
-    jcenter()
+  mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
-    implementation 'org.apache.commons:commons-lang3:3.10'
+  implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+  implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
+  implementation 'org.apache.commons:commons-lang3:3.10'
 
-    implementation 'org.mapstruct:mapstruct:1.4.1.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
+  implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+  annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
-    implementation 'org.webjars:jquery:3.5.1'
-    implementation 'org.webjars:bootstrap:4.5.0'
-    implementation 'org.webjars:font-awesome:5.13.0'
+  implementation 'org.webjars:jquery:3.5.1'
+  implementation 'org.webjars:bootstrap:4.5.0'
+  implementation 'org.webjars:font-awesome:5.13.0'
 
-    runtimeOnly 'org.postgresql:postgresql'
+  runtimeOnly 'org.postgresql:postgresql'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0' // lombok 1.18.16 이상인 경우 필요
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0' // lombok 1.18.16 이상인 경우 필요
 
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+  testCompileOnly 'org.projectlombok:lombok'
+  testAnnotationProcessor 'org.projectlombok:lombok'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
