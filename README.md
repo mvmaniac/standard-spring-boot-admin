@@ -6,7 +6,7 @@
 
 ### 2. 차이점
 
-* Spring Boot 2, Gradle 6 기반
+* Spring Boot 2, Gradle 7 기반
 * EditorConfig 설정 추가
 * 최대한 이해한 부분만 적용함
 
