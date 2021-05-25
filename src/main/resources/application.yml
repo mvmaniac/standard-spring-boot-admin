@@ -7,14 +7,12 @@ spring:
     username: dev
     password: dev
 
-    initialization-mode: never
-    platform: postgres
-    # 예전에는 schema 생성은 jpa 쪽에서 하고 data 는 datasource 에서 했었으나
-    # 2.3.7+, 2.4.1+ 이상 부터 안됨 그리고 datasource 가 먼저 실행 되는 듯? 혼합 해서 쓰지말고 각자 써야 할듯?
-    # 일단 편법으로 schema 속성이 존재 해야 data 속성에 있는 sql이 실행되므로 빈 schema.sql 파일을 만듬
-    # 다만 최초 jpa 로 테이블 생성 한 후 initialization-mode 를 변경해서 데이터를 넣어야 할듯...
-    schema: classpath:sql/schema.sql
-    data: classpath:sql/data-${spring.datasource.platform}.sql
+  sql:
+    init:
+      # 최초 실행 시 ddl-auto를 create를 해서 테이블 생성 always로 바꿔서 데이터를 넣은 후 다시 never로 할것...
+      mode : never
+      platform: postgres
+      data-locations: classpath:sql/data-${spring.sql.init.platform}.sql
 
   jpa:
     open-in-view: false
