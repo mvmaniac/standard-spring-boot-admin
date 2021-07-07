@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, _, ~{::style})}">
+      th:replace="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, _, ~{::style})}">
 <head>
   <title>환경설정 - DevFactory</title>
   <style>

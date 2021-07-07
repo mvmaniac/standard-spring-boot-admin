@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, ~{::script}, _)}">
+      th:replace="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, ~{::script}, _)}">
 <head>
   <title>전체 게시판 - DevFactory</title>
 </head>

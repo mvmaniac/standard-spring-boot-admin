@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, _, ~{::link})}">
+      th:replace="~{layouts/layoutDefault :: default(~{::main}, ~{::title}, _, ~{::link})}">
 <head>
   <link rel="stylesheet" th:href="@{/css/index.css}"/>
   <title>DevFactory</title>

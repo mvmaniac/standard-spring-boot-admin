@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/layoutSign :: sign(~{::main}, ~{::title}, ~{::script})}">
+      th:replace="~{layouts/layoutSign :: sign(~{::main}, ~{::title}, ~{::script})}">
 <head>
   <title>회원가입 - DevFactory</title>
 </head>

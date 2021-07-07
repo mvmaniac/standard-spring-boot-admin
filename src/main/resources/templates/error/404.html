@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/layoutError :: error(~{::main}, ~{::title})}">
+      th:replace="~{layouts/layoutError :: error(~{::main}, ~{::title})}">
 <head>
   <title>404</title>
 </head>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, _, _)}">
+      th:replace="~{layouts/fragments/tab :: tab(~{::tabMain}, _, _)}">
 
 <div th:ref="tabMain" th:object="${result}" class="table-responsive">
   <table class="table table-hover table-bordered table-dark">

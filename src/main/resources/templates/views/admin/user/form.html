@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:insert="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
+      th:replace="~{layouts/fragments/tab :: tab(~{::tabMain}, ~{::tabJs}, ~{::tabStyle})}">
 
 <style th:ref="tabStyle">
   hr {margin: 0 0 1em 0}
