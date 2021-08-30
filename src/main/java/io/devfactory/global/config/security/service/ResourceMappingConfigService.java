@@ -5,10 +5,6 @@ import io.devfactory.account.domain.Resource;
 import io.devfactory.account.domain.Role;
 import io.devfactory.account.repository.AccessIpRepository;
 import io.devfactory.account.repository.ResourceRepository;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -17,7 +13,10 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static java.util.stream.Collectors.toList;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -57,7 +56,7 @@ public class ResourceMappingConfigService {
   public List<String> getAccessIpAddress() {
     return accessIpRepository.findAll().stream()
         .map(AccessIp::getIpAddress)
-        .collect(toList())
+        .toList()
       ;
   }
 

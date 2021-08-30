@@ -1,23 +1,17 @@
 package io.devfactory.account.domain;
 
+import io.devfactory.global.common.model.BaseEntity;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
+
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PROTECTED;
-
-import io.devfactory.global.common.model.BaseEntity;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter

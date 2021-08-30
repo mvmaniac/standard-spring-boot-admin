@@ -1,7 +1,5 @@
 package io.devfactory.global.config.security.filter;
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +9,6 @@ import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 // 인가처리를 AbstractSecurityInterceptor 에게 맡겨도 되는데
 // 미리 고정된 정보를 가지고 인가처리를 안타도 되도록 확인 해서 null로 리턴
@@ -23,12 +20,12 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
   @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
   private boolean observeOncePerRequest = true;
 
-  private final List<RequestMatcher> permitAllRequestMatchers;
+  private final List<AntPathRequestMatcher> permitAllRequestMatchers;
 
   public PermitAllFilter(String... permitAllResources) {
     permitAllRequestMatchers = Arrays.stream(permitAllResources)
         .map(AntPathRequestMatcher::new)
-        .collect(toList())
+        .toList()
     ;
   }
 
