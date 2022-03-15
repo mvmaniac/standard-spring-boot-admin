@@ -36,7 +36,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     final String username = requestView.getUsername();
     final String password = requestView.getPassword();
 
-    if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+    if (StringUtils.hasLength(username) || StringUtils.hasLength(password)) {
       throw new UsernameNotFoundException("username or password is empty...");
     }
 

@@ -69,9 +69,8 @@ public class Account extends BaseEntity {
     return new Account(id, username, password, email, age);
   }
 
-  public Account encodePassword(PasswordEncoder encoder) {
+  public void encodePassword(PasswordEncoder encoder) {
     this.password.encode(encoder);
-    return this;
   }
 
   public boolean matchPassword(PasswordEncoder encoder, String rawPassword) {
@@ -87,7 +86,7 @@ public class Account extends BaseEntity {
     this.email = changeAccount.getEmail();
     this.age = changeAccount.getAge();
 
-    if (!StringUtils.isEmpty(changeAccount.getPasswordValue())) {
+    if (!StringUtils.hasLength(changeAccount.getPasswordValue())) {
       this.password = changeAccount.getPassword();
     }
   }
