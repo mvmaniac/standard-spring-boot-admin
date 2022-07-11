@@ -13,6 +13,7 @@ import org.aspectj.weaver.tools.PointcutParser;
 import org.aspectj.weaver.tools.PointcutPrimitive;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.method.MapBasedMethodSecurityMetadataSource;
 import org.springframework.util.Assert;
@@ -21,7 +22,7 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class ProtectPointcutPostProcessor implements BeanPostProcessor {
 
-  private final Map<String, List<ConfigAttribute>> pointcutMap = new LinkedHashMap<String, List<ConfigAttribute>>();
+  private final Map<String, List<ConfigAttribute>> pointcutMap = new LinkedHashMap<>();
   private final MapBasedMethodSecurityMetadataSource mapBasedMethodSecurityMetadataSource;
   private final Set<PointcutExpression> pointCutExpressions = new LinkedHashSet<>();
   private final PointcutParser parser;
@@ -42,11 +43,13 @@ public class ProtectPointcutPostProcessor implements BeanPostProcessor {
             supportedPrimitives);
   }
 
-  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+  @Override
+  public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
     return bean;
   }
 
-  public Object postProcessBeforeInitialization(Object bean, String beanName)
+  @Override
+  public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName)
       throws BeansException {
 
     if (processedBeans.contains(beanName)) {

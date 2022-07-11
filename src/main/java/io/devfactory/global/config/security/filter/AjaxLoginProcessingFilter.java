@@ -3,15 +3,16 @@ package io.devfactory.global.config.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.devfactory.account.dto.request.LoginRequestView;
 import io.devfactory.global.config.security.token.AjaxAuthenticationToken;
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -36,7 +37,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     final String username = requestView.getUsername();
     final String password = requestView.getPassword();
 
-    if (StringUtils.hasLength(username) || StringUtils.hasLength(password)) {
+    if (!StringUtils.hasLength(username) || !StringUtils.hasLength(password)) {
       throw new UsernameNotFoundException("username or password is empty...");
     }
 
