@@ -4,7 +4,7 @@ import io.devfactory.account.domain.Resource;
 import io.devfactory.account.repository.ResourceRepository;
 import io.devfactory.global.config.security.metadatasource.UrlFilterInvocationSecurityMedataSource;
 import java.util.List;
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

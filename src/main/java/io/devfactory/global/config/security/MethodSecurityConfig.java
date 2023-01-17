@@ -3,7 +3,6 @@ package io.devfactory.global.config.security;
 import io.devfactory.global.config.security.factory.MethodResourcesMapFactoryBean;
 import io.devfactory.global.config.security.processor.ProtectPointcutPostProcessor;
 import io.devfactory.global.config.security.service.ResourceMappingConfigService;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +10,8 @@ import org.springframework.security.access.method.MapBasedMethodSecurityMetadata
 import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
+
+import java.util.Objects;
 
 // prePostEnabled 기본 값인 false로 해도 됨, 다른 곳에서 샘플로 쓴 곳이 있어서 그냥 둠...
 @RequiredArgsConstructor

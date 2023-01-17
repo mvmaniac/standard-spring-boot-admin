@@ -1,6 +1,6 @@
 package io.devfactory.global.config.security.common;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
