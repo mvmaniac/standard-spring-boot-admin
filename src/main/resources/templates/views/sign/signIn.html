@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/layoutSign :: sign(~{::main}, ~{::title}, ~{::script})}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layoutSign :: sign(~{::main}, ~{::title}, ~{::script})}">
 <head>
   <title>로그인 - DevFactory</title>
 </head>
@@ -43,7 +44,7 @@
           <label class="custom-control-label small hand" for="customCheck1" title="로그인 유지">로그인 유지</label>
         </div>-->
 
-        <button class="btn btn-lg btn-sign btn-block text-uppercase" type="submit" title="로그인">
+        <button class="btn btn-lg btn-sign btn-block text-uppercase" title="로그인">
           <i class="fas fa-sign-in-alt mr-2"></i>로그인
         </button>
 
@@ -63,10 +64,27 @@
 
 <script th:inline="javascript">
   var $inputUsername = $('#inputUsername'),
-      $inputPassword = $('#inputPassword');
+      $inputPassword = $('#inputPassword'),
+      $btnSign = $('button.btn-sign');
 
   $(function () {
-    $('button.btn-sign').click(function (evt) {
+
+    $inputUsername.keyup(function (evt) {
+      if (evt.keyCode === 13) {
+        evt.preventDefault();
+        $btnSign.trigger('click');
+      }
+    });
+
+    $inputPassword.keyup(function (evt) {
+      if (evt.keyCode === 13) {
+        evt.preventDefault();
+        $btnSign.trigger('click');
+
+      }
+    });
+
+    $btnSign.click(function (evt) {
       evt.preventDefault();
 
       if (!validationForm()) {
@@ -79,11 +97,9 @@
         contentType: 'application/json',
         dataType: 'json',
         data: formToJson()
-      })
-      .done(function (response, textStatus, jqXHR) {
+      }).done(function (response, textStatus, jqXHR) {
         location.href = '[(@{/})]';
-      })
-      .fail(function (jqXHR, textStatus, error) {
+      }).fail(function (jqXHR, textStatus, error) {
         console.error(textStatus, error);
       });
     });

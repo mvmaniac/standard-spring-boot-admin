@@ -14,9 +14,9 @@ VALUES
 
 INSERT INTO tb_account (account_id, account_username, account_password, account_email, account_age, created_by, updated_by, created_date, updated_date)
 VALUES
-(nextval('seq_tb_account'), 'admin', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'admin@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
-(nextval('seq_tb_account'), 'dev1', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'dev1@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
-(nextval('seq_tb_account'), 'manager', '{bcrypt}$2a$10$OuaOEaaap5GFL/zGB5asHum4rRzjs3H43JWs4kFPgILWpjlUwcoHC', 'manager@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
+(nextval('seq_tb_account'), 'admin', '{bcrypt}$2a$10$zaRj3/CdrkM0ZKblqC8Ni.6U2l3N/JRkzvLfcg.SA35VlO9wnmXd2', 'admin@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_account'), 'dev1', '{bcrypt}$2a$10$zaRj3/CdrkM0ZKblqC8Ni.6U2l3N/JRkzvLfcg.SA35VlO9wnmXd2', 'dev1@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580'),
+(nextval('seq_tb_account'), 'manager', '{bcrypt}$2a$10$zaRj3/CdrkM0ZKblqC8Ni.6U2l3N/JRkzvLfcg.SA35VlO9wnmXd2', 'manager@gmail.com', 30, 1, 1, '2020-05-20 23:06:14.947580', '2020-05-20 23:06:14.947580')
 ;
 
 INSERT INTO tb_account_role (account_role_id, account_id, role_id, created_by, updated_by, created_date, updated_date)

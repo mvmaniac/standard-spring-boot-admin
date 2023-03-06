@@ -5,35 +5,38 @@ import io.devfactory.global.config.security.filter.PermitAllFilter;
 import io.devfactory.global.config.security.provider.CustomAuthenticationProvider;
 import io.devfactory.global.config.security.service.ResourceMappingConfigService;
 import io.devfactory.global.config.security.voter.IpAddressVoter;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @RequiredArgsConstructor
-@Order(1)
+@Order(2)
 @Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 
   private final UserDetailsService userDetailsService;
   private final ResourceMappingConfigService resourceMappingConfigService;
@@ -49,37 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public AuthenticationProvider customAuthenticationProvider() {
-    return new CustomAuthenticationProvider(passwordEncoder(), userDetailsService);
-  }
-
-  @Bean
-  public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
-    String[] permitAllRequestMatchers = {"/", "/sign-up/**", "/user/public"};
-
-    final PermitAllFilter permitAllFilter = new PermitAllFilter(permitAllRequestMatchers);
-    permitAllFilter.setSecurityMetadataSource(urlFilterInvocationSecurityMedataSource);
-    permitAllFilter.setAuthenticationManager(authenticationManagerBean());
-    permitAllFilter.setAccessDecisionManager(affirmativeBased());
-
-    return permitAllFilter;
-  }
-
-  // customFilterSecurityInterceptor 를 filterRegistrationBean 으로 등록해서 
-  // enabled 를 false 로 해서 securityFilterChain 에서만 등록해서 사용되도록 함
-  // 만약 이걸 하지 않으면 web.ignoring 으로 등록된 리소스들이 무시되어 customFilterSecurityInterceptor를 탐
-  @Bean
-  public FilterRegistrationBean<FilterSecurityInterceptor> filterRegistrationBean()
-      throws Exception {
-    final FilterRegistrationBean<FilterSecurityInterceptor> filterRegistrationBean = new FilterRegistrationBean<>();
-    filterRegistrationBean.setFilter(customFilterSecurityInterceptor());
-    filterRegistrationBean.setEnabled(false);
-    return filterRegistrationBean;
-  }
-
-  @Bean
   public AffirmativeBased affirmativeBased() {
-    List<AccessDecisionVoter<? extends Object>> voters = new ArrayList<>();
+    List<AccessDecisionVoter<?>> voters = new ArrayList<>();
 
     voters.add(new IpAddressVoter(resourceMappingConfigService));
     voters.add(new RoleHierarchyVoter(roleHierarchy()));
@@ -92,29 +66,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new RoleHierarchyImpl();
   }
 
-  @Override
-  public void configure(WebSecurity web) {
-    web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-  }
-
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) {
+  // web.ignoring() 으로 할 수 있으나 경고 메세지가 나옴
+  // https://github.com/spring-projects/spring-security/issues/10938
+  @Order(0)
+  @Bean
+  public SecurityFilterChain resourceChain(HttpSecurity http) throws Exception {
     // @formatter:off
-    auth
-      .authenticationProvider(customAuthenticationProvider())
-    ;
+    return http
+      .securityMatcher(StaticResource.getResources())
+      .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+      .requestCache(RequestCacheConfigurer::disable)
+      .securityContext(AbstractHttpConfigurer::disable)
+      .sessionManagement(AbstractHttpConfigurer::disable)
+      .build();
     // @formatter:on
   }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     // @formatter:off
-    http
-      .authorizeRequests()
+    return http
+      .authorizeHttpRequests(authorize -> authorize
+        .requestMatchers("/", "/sign-up/**", "/user/public")
+          .permitAll()
 
-//        .antMatchers("/", "/sign-up/**", "/user/public")
-//          .permitAll()
-//
 //        .antMatchers("/user/my")
 //          .hasRole("USER")
 //
@@ -125,28 +100,84 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //          .hasRole("ADMIN")
 
         .anyRequest()
-          .authenticated()
-      .and()
-
-      .formLogin()
+          .authenticated())
+      .formLogin(form -> form
         .loginPage("/sign-in/form")
         .loginProcessingUrl("/login")
         .defaultSuccessUrl("/")
         .authenticationDetailsSource(new FormAuthenticationDetailsSource())
         .successHandler(customAuthenticationSuccessHandler)
         .failureHandler(customAuthenticationFailureHandler)
-        .permitAll()
-      .and()
-
-      .logout()
+        .permitAll())
+      .logout(logout -> logout
         .logoutUrl("/sign-out")
-        .logoutSuccessUrl("/")
-      .and()
+        .logoutSuccessUrl("/"))
 
-      // customFilterSecurityInterceptor 로 인해 FilterSecurityInterceptor 은 무시됨 (실행은 되나 이미 필터가 적용된 것은 무시됨)
-      .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class)
-    ;
+      .authenticationProvider(new CustomAuthenticationProvider(passwordEncoder(), userDetailsService))
+      .securityContext(securityContext -> securityContext.requireExplicitSave(false))
+
+      .apply(new CustomWebSecurityConfigurer())
+        .setSecurityMetadataSource(urlFilterInvocationSecurityMedataSource)
+        .setAccessDecisionManager(affirmativeBased())
+      .and()
+      .build();
     // @formatter:on
+  }
+
+  // Spring Security 버전 업에 따른 커스텀 필터가 아닌 커스텀 DSL 방식으로 변경
+  // https://stackoverflow.com/questions/72427751/update-the-spring-security-configuration-class-with-spring-boot-2-7-0
+  public static class CustomWebSecurityConfigurer extends AbstractHttpConfigurer<CustomWebSecurityConfigurer, HttpSecurity> {
+
+    private FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
+    private AccessDecisionManager accessDecisionManager;
+
+    @Override
+    public void configure(HttpSecurity http) {
+      String[] permitAllRequestMatchers = {"/", "/sign-up/**", "/user/public", "/error"};
+
+      final PermitAllFilter permitAllFilter = new PermitAllFilter(permitAllRequestMatchers);
+      permitAllFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
+      permitAllFilter.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
+      permitAllFilter.setAccessDecisionManager(accessDecisionManager);
+
+      http.addFilterBefore(permitAllFilter, FilterSecurityInterceptor.class);
+    }
+
+    public CustomWebSecurityConfigurer setSecurityMetadataSource(
+        FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource) {
+      this.filterInvocationSecurityMetadataSource = filterInvocationSecurityMetadataSource;
+      return this;
+    }
+
+    public CustomWebSecurityConfigurer setAccessDecisionManager(AccessDecisionManager accessDecisionManager) {
+      this.accessDecisionManager = accessDecisionManager;
+      return this;
+    }
+
+  }
+
+  @Getter
+  public static class StaticResource {
+
+    private StaticResource() {
+      throw new IllegalStateException("Constructor not supported");
+    }
+
+    private static final String[] defaultResources = Arrays.stream(StaticResourceLocation.values())
+        .flatMap(StaticResourceLocation::getPatterns)
+        .toArray(String[]::new);
+
+    public static String[] getResources() {
+      return defaultResources;
+    }
+
+    public static String[] getResources(String... antPatterns) {
+      final var defaultResources = StaticResource.defaultResources;
+      final var resources = Arrays.copyOf(defaultResources, defaultResources.length + antPatterns.length);
+      System.arraycopy(antPatterns, 0, resources, defaultResources.length, antPatterns.length);
+      return resources;
+    }
+
   }
 
 }

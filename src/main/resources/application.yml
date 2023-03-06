@@ -33,6 +33,7 @@ logging:
   level:
     io.devfactory: debug
     org.hibernate.SQL: debug
+    org.springframework.security: debug
 
 decorator:
   datasource:
