@@ -38,8 +38,9 @@
       <tr th:each="board: ${boards}">
         <td th:text="${board.idx}" data-title="#"></td>
         <td th:text="${board.boardType.value}" data-title="분류"></td>
-        <td data-title="제목"><a th:href="@{/boards/{idx}(idx=${board.idx},page=${boards.number + 1})}"
-                              th:text="${board.title}" class="text-white"></a></td>
+        <td data-title="제목"><a
+            th:href="@{/boards/{idx}(idx=${board.idx},page=${boards.number + 1})}"
+            th:text="${board.title}" class="text-white"></a></td>
         <td th:text="${board.createdBy}" data-title="등록자"></td>
         <td th:text="${#temporals.format(board.createdDate, 'yyyy-mm-dd HH:mm:ss')}"
             data-title="등록일"></td>
@@ -56,9 +57,9 @@
       totalPage=${boards.totalPages eq 0 ? 1 : boards.totalPages}">
     <div th:with="
       prevPage=${((pageNumber - 1) / pageBlock) * pageBlock},
-      nextPage=${T(Math).min(prevPage + pageBlock + 1, totalPage)},
+      nextPage=${T(java.lang.Math).min(prevPage + pageBlock + 1, totalPage)},
       startPage=${prevPage + 1},
-      endPage=${T(Math).min(pageBlock + prevPage, totalPage)},
+      endPage=${T(java.lang.Math).min(pageBlock + prevPage, totalPage)},
       isPrev=${startPage > pageBlock},
       isNext=${endPage < totalPage}">
       number: <span th:text="${boards.number}"></span><br/>
@@ -87,9 +88,9 @@
     <ul class="pagination justify-content-center mb-0"
         th:with="
           prevPage=${((pageNumber - 1) / pageBlock) * pageBlock},
-          nextPage=${T(Math).min(prevPage + pageBlock + 1, totalPage)},
+          nextPage=${T(java.lang.Math).min(prevPage + pageBlock + 1, totalPage)},
           startPage=${prevPage + 1},
-          endPage=${T(Math).min(pageBlock + prevPage, totalPage)},
+          endPage=${T(java.lang.Math).min(pageBlock + prevPage, totalPage)},
           isPrev=${startPage > pageBlock},
           isNext=${endPage < totalPage}">
       <li class="page-item" th:classappend="${boards.first} ? 'disabled'" th:title="처음">

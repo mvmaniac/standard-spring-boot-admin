@@ -10,7 +10,7 @@ spring:
   sql:
     init:
       # 최초 실행 시 ddl-auto를 create를 해서 테이블 생성 always로 바꿔서 데이터를 넣은 후 다시 never로 할것...
-      mode : never
+      mode: never
       platform: postgres
       data-locations: classpath:sql/data-${spring.sql.init.platform}.sql
 
@@ -23,7 +23,7 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-#        default_batch_fetch_size: 100
+  #        default_batch_fetch_size: 100
 
   devtools:
     restart.enabled: false

@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @RequiredArgsConstructor
 @Order(2)
 @Configuration
@@ -85,11 +87,12 @@ public class WebSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     // @formatter:off
-    return http
+    final var httpSecurity =http
       .authorizeHttpRequests(authorize -> authorize
-        .requestMatchers("/", "/sign-up/**", "/user/public")
-          .permitAll()
 
+//        .requestMatchers("/", "/sign-up/**", "/user/public")
+//          .permitAll()
+//
 //        .antMatchers("/user/my")
 //          .hasRole("USER")
 //
@@ -114,14 +117,15 @@ public class WebSecurityConfig {
         .logoutSuccessUrl("/"))
 
       .authenticationProvider(new CustomAuthenticationProvider(passwordEncoder(), userDetailsService))
-      .securityContext(securityContext -> securityContext.requireExplicitSave(false))
-
-      .apply(new CustomWebSecurityConfigurer())
-        .setSecurityMetadataSource(urlFilterInvocationSecurityMedataSource)
-        .setAccessDecisionManager(affirmativeBased())
-      .and()
-      .build();
+      .securityContext(securityContext -> securityContext.requireExplicitSave(false));
     // @formatter:on
+
+    final var customWebSecurityConfigurer = new CustomWebSecurityConfigurer();
+    customWebSecurityConfigurer.setSecurityMetadataSource(urlFilterInvocationSecurityMedataSource);
+    customWebSecurityConfigurer.setAccessDecisionManager(affirmativeBased());
+
+    httpSecurity.with(customWebSecurityConfigurer, withDefaults());
+    return httpSecurity.build();
   }
 
   // Spring Security 버전 업에 따른 커스텀 필터가 아닌 커스텀 DSL 방식으로 변경
@@ -149,7 +153,8 @@ public class WebSecurityConfig {
       return this;
     }
 
-    public CustomWebSecurityConfigurer setAccessDecisionManager(AccessDecisionManager accessDecisionManager) {
+    public CustomWebSecurityConfigurer setAccessDecisionManager(
+        AccessDecisionManager accessDecisionManager) {
       this.accessDecisionManager = accessDecisionManager;
       return this;
     }

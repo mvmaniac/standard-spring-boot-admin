@@ -16,6 +16,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 // TODO: config 를 하나로 통일
 @RequiredArgsConstructor
 @Order(1)
@@ -53,11 +55,12 @@ public class AjaxSecurityConfig {
     ;
 
     // Custom Filter 가 아닌 Custom DSL로 설정 추가
-    httpSecurity.apply(new AjaxLoginConfigurer<>())
-      .successHandlerAjax(ajaxAuthenticationSuccessHandler)
-      .failureHandlerAjax(ajaxAuthenticationFailureHandler)
-      .loginProcessingUrl("/api/login");
+    final var ajaxLoginConfigurer = new AjaxLoginConfigurer<HttpSecurity>();
+    ajaxLoginConfigurer.successHandlerAjax(ajaxAuthenticationSuccessHandler);
+    ajaxLoginConfigurer.failureHandlerAjax(ajaxAuthenticationFailureHandler);
+    ajaxLoginConfigurer.loginProcessingUrl("/api/login");
 
+    httpSecurity.with(ajaxLoginConfigurer, withDefaults());
     return httpSecurity.build();
     // @formatter:on
   }
